@@ -42,10 +42,16 @@ const Payroll = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        const monthName = monthNames[parseInt(month, 10) - 1]; // Convert month number to month name
+
         try {
-            await createPayroll({
+            const response = await createPayroll({
                 nurseId,
-                month,
+                month: monthName, // Use month name instead of number
                 year: parseInt(year, 10),
                 salary: parseFloat(salary),
                 overtime: parseFloat(overtime),
@@ -71,10 +77,11 @@ const Payroll = () => {
         <div className="payroll-container">
             <h2 className="title">Payroll Management</h2>
             <form onSubmit={handleSubmit} className="payroll-form">
+                {/* Display user info */}
                 <input
                     type="text"
                     placeholder="User"
-                    value={user ? `${user.firstName} ${user.lastName}` : ''} // Display user name
+                    value={user ? `${user.firstName} ${user.lastName}` : 'Loading...'} // Display user name or loading message
                     disabled
                     className="input-field"
                 />
@@ -123,15 +130,20 @@ const Payroll = () => {
                 <div className="loading">Loading...</div>
             ) : (
                 <ul className="payroll-list">
-                    {payrolls.map((payroll) => (
-                        <li key={payroll._id} className="payroll-item">
-                            <p><strong>Nurse ID:</strong> {payroll.nurseId}</p>
-                            <p><strong>Month:</strong> {payroll.month} {payroll.year}</p>
-                            <p><strong>Salary:</strong> ${payroll.salary}</p>
-                            {payroll.overtime && <p><strong>Overtime:</strong> ${payroll.overtime}</p>}
-                            {payroll.deductions && <p><strong>Deductions:</strong> ${payroll.deductions}</p>}
-                        </li>
-                    ))}
+                    {payrolls.length > 0 ? (
+                        payrolls.map((payroll) => (
+                            <li key={payroll._id} className="payroll-item">
+                                {/* Display Nurse Name (after populating nurse info in backend) */}
+                                <p><strong>Nurse Name:</strong> {payroll.nurseId ? `${payroll.nurseId.firstName} ${payroll.nurseId.lastName}` : 'N/A'}</p>
+                                <p><strong>Month:</strong> {payroll.month} {payroll.year}</p>
+                                <p><strong>Salary:</strong> ${payroll.salary}</p>
+                                {payroll.overtime && <p><strong>Overtime:</strong> ${payroll.overtime}</p>}
+                                {payroll.deductions && <p><strong>Deductions:</strong> ${payroll.deductions}</p>}
+                            </li>
+                        ))
+                    ) : (
+                        <li>No payroll records found.</li>
+                    )}
                 </ul>
             )}
         </div>
