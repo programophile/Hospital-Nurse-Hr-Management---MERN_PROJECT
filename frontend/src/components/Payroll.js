@@ -1,10 +1,20 @@
 
 import React, { useState, useEffect } from 'react';
 import { fetchPayrolls, createPayroll, updatePayroll, deletePayroll, fetchNurses } from '../api';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import Navbar from './Navbar';  // Import the Navbar component
 import '../payroll.css';
 
 const Payroll = () => {
+    const navigate = useNavigate(); // Add useNavigate for redirection
+
+    // Check if user is logged in
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        if (!storedUser) {
+            navigate('/login'); // Redirect to login if user is not logged in
+        }
+    }, []);
     const [payrolls, setPayrolls] = useState([]);
     const [nurseId, setNurseId] = useState('');
     const [month, setMonth] = useState('');

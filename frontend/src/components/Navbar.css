@@ -1,0 +1,44 @@
+.navbar {
+    position: relative; /* Positioning for the mobile menu */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+}
+  
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+}
+  
+.navbar button {
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+  
+.navbar button:hover {
+    background-color: #d32f2f;
+}
+
+.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    background-color: #444;
+    padding: 10px;
+}
+
+.mobile-menu a {
+    color: white;
+    text-decoration: none;
+    margin: 5px 0;
+}
+
+.mobile-menu a:hover {
+    text-decoration: underline;
+}
