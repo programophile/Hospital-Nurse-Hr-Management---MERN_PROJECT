@@ -82,6 +82,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log('Login attempt with email:', email); // Log the login attempt
 
     // Find nurse
     const nurse = await Nurse.findOne({ email });

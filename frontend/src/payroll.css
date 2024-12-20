@@ -1,0 +1,69 @@
+.payroll-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.payroll-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.input-field {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.submit-btn {
+    grid-column: span 2;
+    padding: 12px;
+    font-size: 1.1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+
+.loading {
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.payroll-list {
+    list-style: none;
+    padding: 0;
+}
+
+.payroll-item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.payroll-item p {
+    margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+    .payroll-form {
+        grid-template-columns: 1fr;
+    }
+}
