@@ -20,8 +20,12 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    logout(); // Use the logout function from context
-    navigate('/login');
+    const confirmLogout = window.confirm("Are you sure you want to log out?"); 
+    if (confirmLogout) {
+        logout(); // Use the logout function from context
+        navigate('/login');
+    }
+    // Redundant navigation removed
   };
 
   const toggleMobileMenu = () => {
