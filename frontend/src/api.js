@@ -1,7 +1,8 @@
 // frontend/src/api.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5001/api';
+const API_URL = 'http://localhost:5000/api';
+//hello dont change port number
 
 export const fetchNurses = () => axios.get(`${API_URL}/nurses`);
 export const createNurse = (nurse) => axios.post(`${API_URL}/nurses`, nurse);
