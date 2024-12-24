@@ -1,4 +1,3 @@
-// frontend/src/api.js
 import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/api';
@@ -18,3 +17,13 @@ export const fetchNurseByUserId = (userId) => {
 export const createLeave = (leave) => {
     return axios.post(`${API_URL}/leaves`, leave); // Ensure this matches your backend route
 };
+
+export const fetchUserPayrolls = (userId, month, year) => 
+    axios.get(`${API_URL}/payrolls/user/${userId}?month=${month}&year=${year}`); // Fetch payrolls for a specific user
+
+// New functions for updating and deleting payrolls
+export const updatePayroll = (payrollId, payroll) => 
+    axios.put(`${API_URL}/payrolls/${payrollId}`, payroll);
+
+export const deletePayroll = (payrollId) => 
+    axios.delete(`${API_URL}/payrolls/${payrollId}`);
