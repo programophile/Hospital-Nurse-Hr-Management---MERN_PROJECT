@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Payroll from './components/Payroll';
 import Navbar from './components/Navbar';
+import LeaveRequest from './components/LeaveRequest'; 
 // Placeholder components - create these later
 const NurseDashboard = () => <div>Nurse Dashboard</div>;
 const AdminDashboard = () => <div>Admin Dashboard</div>;
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/" element={<Login />} />
         <Route path="/payrolls" element={<Payroll />} />
+        <Route path="/leave-request" element={<LeaveRequest />} /> {/* Add this line */}
       </Routes>
     </Router>
   );
