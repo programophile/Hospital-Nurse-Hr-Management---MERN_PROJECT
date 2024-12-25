@@ -1,14 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { fetchLeaves, createLeave } from '../api'; // Ensure these functions are correctly imported
+import { fetchLeaves, createLeave,fetchNurses } from '../api'; // Ensure these functions are correctly imported
+import Navbar from './Navbar'; 
+import { useNavigate } from 'react-router-dom';
+import '../leave.css'; 
+
+    // Check if user is logged in
+
 
 const LeaveRequest = () => {
+  const navigate = useNavigate(); // Use navigate function from react-router-dom
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (!storedUser) {
+        navigate('/login'); // Redirect to login if user is not logged in
+    }
+  }, []);
   const [user, setUser ] = useState(null); // Store user object
+  const [nurseId, setNurseId] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [reason, setReason] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [leaves, setLeaves] = useState([]);
+  const [nurses, setNurses] = useState([]); // State to hold list of nurses
+
+  
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+      if (storedUser) {
+      setUser(storedUser);
+      setNurseId(storedUser.id); // Set the Nurse ID from the user info
+  }
+  if (storedUser && storedUser.role === 'admin') {
+                fetchNurses().then((response) => {
+                    setNurses(response.data);
+                }).catch((error) => {
+                    console.error('Error fetching nurses:', error);
+                });
+            }
+        }, []);
+
+
 
   // Load existing leaves
   const loadLeaves = async () => {
@@ -24,56 +57,49 @@ const LeaveRequest = () => {
   // Handle leave request submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user) {
-      setErrorMessage('User  not logged in.'); // Check if user is available
-      return;
-    }
-    
-    const leaveData = { userId: user._id, startDate, endDate, reason }; // Use user ID from user object
+    console.log('Submitting leave request:', { nurseId, startDate, endDate, reason }); 
+  const leaveData = {
+    nurseId, // Ensure this is the correct ID
+    startDate,
+    endDate,
+    reason
+};
+
+console.log('Submitting leave request:', leaveData); // Log the leave data // Use user ID from user object
     try {
       const response = await createLeave(leaveData);
       console.log('Leave request created:', response.data);
       setSuccessMessage('Leave request created successfully!');
       // Reset form fields
-      setStartDate('');
+      loadLeaves();
       setEndDate('');
-      setReason('');
-      setErrorMessage('');
-      loadLeaves(); // Reload leaves after successful submission
+      setStartDate('');
+      setReason(''); // Reload leaves after successful submission
     } catch (error) {
       console.error('Error creating leave request:', error);
-      if (error.response) {
-        console.error('Error Response Data:', error.response.data);
-        setErrorMessage(error.response.data.message || 'An error occurred while creating the leave request.');
-      } else {
-        setErrorMessage('An unexpected error occurred.');
-      }
+      setErrorMessage('Error creating leave request. Please try again.');
     }
   };
-
+    useEffect(() => {
+        loadLeaves();
+    }, [user]); 
   // Fetch user information on component mount
-  useEffect(() => {
-    const storedUser  = localStorage.getItem('user'); // Get user object from localStorage
-    console.log('Stored User:', storedUser ); // Debugging line
-    if (storedUser ) {
-      setUser (JSON.parse(storedUser )); // Parse and set user object
-    } else {
-      setErrorMessage('User  not logged in or user information not found.');
-    }
-  }, []); // Run only once on mount
-
   // Load leaves on component mount
-  useEffect(() => {
-    loadLeaves(); // Load existing leaves when component mounts
-  }, []);
 
   return (
-    <div>
+    <div className="leave-container"> {/* Add class for styling */}
       <h2>Leave Request</h2>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       {successMessage && <p>{successMessage}</p>}
-      {user ? ( // Check for user object
-        <form onSubmit={handleSubmit}>
+      {user ? (
+        <form onSubmit={handleSubmit} className="leave-form"> {/* Add class for styling */}
+          <input
+            type="text"
+            placeholder="User "
+            value={user ? `${user.firstName} ${user.lastName}` : 'Loading...'}
+            disabled
+            className="input-field"
+          />
           <input
             type="date"
             value={startDate}
@@ -105,8 +131,8 @@ const LeaveRequest = () => {
       <h3>Existing Leave Requests</h3>
       <ul>
         {leaves.map((leave) => (
-          <li key={leave._id}>
-            {leave.startDate} to {leave.endDate} - {leave .reason}
+          <li key={ leave.id}>
+            {leave.startDate} to {leave.endDate} - {leave.reason}
           </li>
         ))}
       </ul>
