@@ -11,3 +11,4 @@ export const fetchLeaves = () => axios.get(`${API_URL}/leaves`);
 export const createLeave = (leave) => axios.post(`${API_URL}/leaves`, leave);
 export const fetchPayrolls = () => axios.get(`${API_URL}/payrolls`);
 export const createPayroll = (payroll) => axios.post(`${API_URL}/payrolls`, payroll);
+export const deleteShift = (shiftId) => axios.delete(`${API_URL}/shifts/${shiftId}`);

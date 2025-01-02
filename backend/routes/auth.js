@@ -1,77 +1,101 @@
 import { Router } from 'express';
 import Nurse from '../models/Nurse.js';
+import Admin from '../models/Admin.js';
 import jwt from 'jsonwebtoken';
 const { sign } = jwt;
 
 const router = Router();
 
+// Registration Route
 router.post('/register', async (req, res) => {
   try {
     const { 
       firstName, 
       lastName, 
       email, 
-      password, 
-      employeeId, 
+      password,  
       department,
       contactNumber,
       role // Include role in the registration data
     } = req.body;
 
     // Validation
-    if (!firstName || !lastName || !email || !password || !employeeId) {
+    if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Create new nurse/admin
-    const nurse = new Nurse({
-      firstName,
-      lastName,
-      email,
-      password,
-      employeeId,
-      department,
-      contactNumber,
-      role // Set the role
-    });
+    let user;
+    if (role === 'admin') {
+      // Generate the next employee ID for admin
+      const employeeId = await Admin.generateEmployeeId();
+      user = new Admin({
+        firstName,
+        lastName,
+        email,
+        password,
+        employeeId,
+        department,
+        contactNumber,
+        role
+      });
+    } else {
+      // Generate the next employee ID for nurse
+      const employeeId = await Nurse.generateEmployeeId();
+      user = new Nurse({
+        firstName,
+        lastName,
+        email,
+        password,
+        employeeId,
+        department,
+        contactNumber,
+        role
+      });
+    }
 
-    // Save the nurse/admin
-    const savedNurse = await nurse.save();
+    // Save the user (admin or nurse)
+    const savedUser  = await user.save();
 
     // Generate JWT
     const token = sign(
-      { id: savedNurse._id, email: savedNurse.email, role: savedNurse.role },
+      { id: savedUser ._id, email: savedUser .email, role: savedUser .role },
       process.env.JWT_SECRET || 'your_jwt_secret',
       { expiresIn: '1h' }
     );
 
     res.status(201).json({
       token,
-      nurse: {
-        id: savedNurse._id,
-        firstName: savedNurse.firstName,
-        lastName: savedNurse.lastName,
-        email: savedNurse.email,
-        role: savedNurse.role
+      user: {
+        id: savedUser ._id,
+        firstName: savedUser .firstName,
+        lastName: savedUser .lastName,
+        email: savedUser .email,
+        role: savedUser .role,
+        employeeId: savedUser .employeeId
       }
     });
   } catch (error) {
     res.status(500).json({ message: 'Registration failed', error: error.message });
   }
 });
+
 // Login Route
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find nurse
-    const nurse = await Nurse.findOne({ email });
-    if (!nurse) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+    // Check if the user is a nurse
+    let user = await Nurse.findOne({ email });
+    if (!user) {
+      // If not a nurse, check if the user is an admin
+      user = await Admin.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ message: 'Invalid credentials' });
+      }
     }
 
     // Check password
-    const isMatch = await nurse.comparePassword(password);
+    const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
@@ -79,9 +103,9 @@ router.post('/login', async (req, res) => {
     // Generate JWT
     const token = sign(
       { 
-        id: nurse._id, 
-        email: nurse.email,
-        role: nurse.role 
+        id: user._id, 
+        email: user.email,
+        role: user.role 
       }, 
       process.env.JWT_SECRET || 'your_jwt_secret', 
       { expiresIn: '1h' }
@@ -89,12 +113,13 @@ router.post('/login', async (req, res) => {
 
     res.json({
       token,
-      nurse: {
-        id: nurse._id,
-        firstName: nurse.firstName,
-        lastName: nurse.lastName,
-        email: nurse.email,
-        role: nurse.role
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        employeeId: user.employeeId
       }
     });
   } catch (error) {

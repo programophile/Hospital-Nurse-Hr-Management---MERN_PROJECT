@@ -15,15 +15,31 @@ router.post('/', async (req, res) => {
 });
 
 // Get All Shifts
+// backend/routes/shifts.js
 router.get('/', async (req, res) => {
     try {
-        const shifts = await Shift.find().populate('nurseId'); // Use Shift.find() here
+      const shifts = await Shift.find().populate('nurseId'); // Populate nurse details
+      const formattedShifts = shifts.map(shift => ({
+        ...shift.toObject(),
+        date: shift.date.toISOString().split('T')[0], // Format date
+        startTime: shift.startTime, // Ensure start time is in HH:mm format
+        endTime: shift.endTime // Ensure end time is in HH:mm format
+      }));
+      res.json(formattedShifts);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching shifts', error: error.message });
+    }
+  });
+// Get Shifts for Logged-in Nurse
+router.get('/me', async (req, res) => {
+    const nurseId = req.nurse.id; // Assuming you have middleware to set req.nurse
+    try {
+        const shifts = await Shift.find({ nurseId }).populate('nurseId');
         res.status(200).json(shifts);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching shifts', error: error.message });
     }
 });
-
 // Example for updating a shift
 router.put('/:id', async (req, res) => {
     const { id } = req.params;

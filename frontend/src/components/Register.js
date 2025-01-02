@@ -9,7 +9,6 @@ const Register = () => {
     lastName: '',
     email: '',
     password: '',
-    employeeId: '',
     department: '',
     contactNumber: '',
     role: 'nurse' // Default role
@@ -73,14 +72,6 @@ const Register = () => {
           name="password"
           placeholder="Password"
           value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="employeeId"
-          placeholder="Employee ID"
-          value={formData.employeeId}
           onChange={handleChange}
           required
         />

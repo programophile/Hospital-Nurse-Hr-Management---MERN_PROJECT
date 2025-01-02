@@ -1,14 +1,12 @@
-// backend/models/Shift.js
 import mongoose from 'mongoose';
 
 const ShiftSchema = new mongoose.Schema({
-    nurseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Nurse', required: true },
-    date: { type: Date, required: true },
-    startTime: { type: String, required: true },
-    endTime: { type: String, required: true },
-    status: { type: String, enum: ['Scheduled', 'Completed', 'Cancelled'], default: 'Scheduled' },
-}, { timestamps: true }); // Enable timestamps
-
+  nurseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Nurse', required: true },
+  date: { type: Date, required: true },
+  startTime: { type: String, required: true },
+  endTime: { type: String, required: true },
+  status: { type: String, enum: ['Scheduled', 'Completed', 'Cancelled'], default: 'Scheduled' },
+}, { timestamps: true });
 // Validate time format
 ShiftSchema.path('startTime').validate((value) => {
     return /^\d{2}:\d{2}$/.test(value); // HH:mm format

@@ -1,0 +1,71 @@
+/* NurseDashboard.css */
+.dashboard-container {
+  display: flex;
+  gap: 20px; /* Space between the calendar and other content */
+  padding: 20px; /* Add padding around the dashboard */
+  height: 100vh; /* Make the dashboard take up the full viewport height */
+  box-sizing: border-box; /* Include padding in the height */
+}
+
+.calendar-container {
+  flex: 1; /* Take up remaining space */
+  width: 100%; /* Make the calendar take up the full width */
+  height: calc(100vh - 40px); /* Dynamic height based on viewport height minus padding */
+  max-width: 1200px; /* Increase the max-width for a larger calendar */
+  margin: 0 auto; /* Center the calendar */
+  padding: 20px; /* Add padding inside the calendar container */
+  box-sizing: border-box; /* Include padding in the width and height */
+  background-color: #fff; /* Optional: Add a background color */
+  border-radius: 8px; /* Optional: Add rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.other-content {
+  flex: 1; /* Take up more space for other content */
+  padding: 20px; /* Add padding inside the other content */
+  background-color: #f9f9f9; /* Optional: Add a background color */
+  border-radius: 8px; /* Optional: Add rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.fc-event {
+  font-size: 12px; /* Reduce the font size */
+  padding: 4px; /* Add padding to the event */
+  white-space: normal; /* Allow text to wrap */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Add ellipsis for overflow text */
+  background-color: #1a3042; /* Dark blue background */
+  border: 1px solid #90caf9; /* Light blue border */
+  border-radius: 4px; /* Rounded corners */
+  color: #fff; /* White text */
+}
+
+.fc-event:hover {
+  background-color: #90caf9; /* Light blue background on hover */
+  color: #1a3042; /* Dark blue text on hover */
+}
+
+.shift-day {
+  background-color: #e3f2fd !important; /* Light blue background */
+  border: 2px solid #1a3042 !important; /* Dark blue border */
+  border-radius: 4px !important; /* Rounded corners */
+}
+
+/* Optional: Add styles for the FullCalendar header */
+.fc-header-toolbar {
+  margin-bottom: 20px; /* Add space below the header */
+}
+
+/* Optional: Add styles for the FullCalendar buttons */
+.fc-button {
+  background-color: #1a3042; /* Dark blue background */
+  border: 1px solid #1a3042; /* Dark blue border */
+  color: #fff; /* White text */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.fc-button:hover {
+  background-color: #90caf9; /* Light blue background on hover */
+  border-color: #90caf9; /* Light blue border on hover */
+  color: #1a3042; /* Dark blue text on hover */
+}

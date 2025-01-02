@@ -16,42 +16,30 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'; // Make sure to import bcrypt correctly
 
 const nurseSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: [true, 'First name is required']
-  },
-  lastName: {
-    type: String,
-    required: [true, 'Last name is required']
-  },
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-    lowercase: true,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: [true, 'Password is required']
-  },
-  employeeId: {
-    type: String,
-    required: [true, 'Employee ID is required'],
-    unique: true
-  },
-  department: {
-    type: String
-  },
-  contactNumber: {
-    type: String
-  },
-  role: {
-    type: String,
-    enum: ['nurse', 'admin'],
-    default: 'nurse'
-  }
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  employeeId: { type: String, required: true, unique: true },
+  department: { type: String },
+  contactNumber: { type: String },
+  role: { type: String, default: 'nurse' },
+  profilePicture: { type: String, default: '' }, // URL to the profile picture
+  specialty: { type: String, default: '' }, // Nurse's specialty
+  educationInstitution: { type: String, default: '' } // Education institution name
 }, { timestamps: true });
+
+
+// Method to generate the next employee ID
+nurseSchema.statics.generateEmployeeId = async function() {
+  const lastNurse = await this.findOne().sort({ employeeId: -1 });
+  if (!lastNurse) {
+    return 'N0001'; // If no nurse exists, start with N0001
+  }
+  const lastId = parseInt(lastNurse.employeeId, 10);
+  const nextId = (lastId + 1).toString().padStart(4, '0'); // Increment and pad with leading zeros
+  return `N${nextId}`;
+};
 
 // Password hashing middleware
 nurseSchema.pre('save', async function(next) {

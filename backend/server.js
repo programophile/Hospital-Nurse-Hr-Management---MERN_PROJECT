@@ -1,4 +1,3 @@
-
 import cors from 'cors';
 import express, { json } from 'express';
 import { connect } from 'mongoose';
@@ -14,18 +13,29 @@ import payrollRoutes from './routes/payroll.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
+// Initialize app
 const app = express();
 
-// Middleware
-app.use(cors());
-app.use(helmet());
+// CORS configuration
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
+app.use(
+    helmet({
+      crossOriginResourcePolicy: false,
+    })
+  );
 app.use(morgan('combined')); // Logging
 app.use(json()); // Middleware to parse JSON requests
-
-// Use the authRoutes.
-app.use('/api/auth', authRoutes);
+app.use('/uploads', express.static('uploads')); // Serve static files
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/nurses', nurseRoutes);
 app.use('/api/shifts', shiftRoutes);
 app.use('/api/leaves', leaveRoutes);
@@ -37,7 +47,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Internal Server Error', error: err.message });
 });
 
-const PORT = process.env.PORT || 5000; // Set your desired port
+const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
 if (!process.env.MONGODB_URI) {
