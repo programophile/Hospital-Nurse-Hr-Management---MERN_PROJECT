@@ -110,7 +110,7 @@ router.post('/login', async (req, res) => {
     res.json({
       token,
       nurse: {
-        id: nurse._id,
+        _id: nurse._id,
         firstName: nurse.firstName,
         lastName: nurse.lastName,
         email: nurse.email,
