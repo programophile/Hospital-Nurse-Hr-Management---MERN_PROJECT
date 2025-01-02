@@ -37,8 +37,12 @@ const Navbar = () => {
       <div className="navbar">
         <Link to="/">Home</Link>
         <Link to="/payrolls">Payroll</Link>
+
         <Link to="/payroll-history">Payroll History</Link>
         <Link to="/payslip-download">Download Payslip</Link>
+
+        <Link to="/leave-request">Leave Request</Link> {/* Add this line */}
+
         {user && (
           <>
             <span>Welcome, {user.firstName} {user.lastName}</span>
