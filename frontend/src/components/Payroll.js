@@ -32,7 +32,7 @@ const Payroll = () => {
         const storedUser = JSON.parse(localStorage.getItem('user'));
         if (storedUser) {
             setUser(storedUser);
-            setNurseId(storedUser.id); // Set the Nurse ID from the user info
+            setNurseId(storedUser._id); // Set the Nurse ID from the user info
         }
 
         // Set the default month and year to the current values

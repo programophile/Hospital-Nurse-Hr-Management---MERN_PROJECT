@@ -37,12 +37,25 @@ router.post('/', async (req, res) => {
 
 // Get Payroll History
 router.get('/', async (req, res) => {
+    console.log('Fetching payroll history');
     try {
         // Fetch payroll entries and populate nurseId to get the user's full name
         const payrolls = await Payroll.find().populate('nurseId', 'firstName lastName');
         res.status(200).json(payrolls);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching payroll history', error: error.message });
+    }
+});
+
+// Get Payrolls by User ID
+router.get('/user/:userId', async (req, res) => {
+    console.log('Fetching payrolls for user');
+    try {
+        const { userId } = req.params;
+        const payrolls = await Payroll.find({ nurseId: userId });
+        res.status(200).json(payrolls);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching user payrolls', error: error.message });
     }
 });
 
@@ -71,6 +84,40 @@ router.delete('/:id', async (req, res) => {
         res.status(200).json({ message: 'Payroll entry deleted successfully', deletedPayroll });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting payroll entry', error: error.message });
+    }
+});
+
+// Import pdfGenerator
+import { generatePayslipPDF } from '../utils/pdfGenerator.js';
+
+// Payslip Download Endpoint
+router.get('/payslip/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { month, year } = req.query;
+
+        // Find the payroll record
+        const payroll = await Payroll.findOne({ 
+            nurseId: userId,
+            month,
+            year
+        }).populate('nurseId', 'firstName lastName');
+
+        if (!payroll) {
+            return res.status(404).json({ message: 'Payroll record not found' });
+        }
+
+        // Generate PDF
+        const pdfBuffer = await generatePayslipPDF(payroll);
+
+        // Set response headers
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename=payslip_${month}_${year}.pdf`);
+        res.send(pdfBuffer);
+
+    } catch (error) {
+        console.error('Error generating payslip:', error);
+        res.status(500).json({ message: 'Error generating payslip', error: error.message });
     }
 });
 

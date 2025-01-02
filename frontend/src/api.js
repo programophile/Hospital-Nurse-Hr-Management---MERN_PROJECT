@@ -14,6 +14,13 @@ export const createPayroll = (payroll) => axios.post(`${API_URL}/payrolls`, payr
 export const fetchUserPayrolls = (userId) => 
     axios.get(`${API_URL}/payrolls/user/${userId}`); // Fetch payrolls for a specific user
 
+// Payslip download function
+export const downloadPayslip = (userId, month, year) =>
+    axios.get(`${API_URL}/payrolls/payslip/${userId}`, {
+        params: { month, year },
+        responseType: 'blob'
+    });
+
 // New functions for updating and deleting payrolls
 export const updatePayroll = (payrollId, payroll) => 
     axios.put(`${API_URL}/payrolls/${payrollId}`, payroll);
