@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchUserPayrolls } from '../api';
 import { useNavigate } from 'react-router-dom';
-import '../payroll.css';
+import './PayrollHistory.css';
 
 const PayrollHistory = () => {
     const navigate = useNavigate();

@@ -4,8 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import './PayslipDownload.css';
 
 const PayslipDownload = () => {
-    const [month, setMonth] = useState('');
-    const [year, setYear] = useState('');
+    const currentDate = new Date();
+    const months = ["January", "February", "March", "April", "May", "June", 
+                   "July", "August", "September", "October", "November", "December"];
+    
+    const [month, setMonth] = useState(months[currentDate.getMonth()]);
+    const [year, setYear] = useState(currentDate.getFullYear().toString());
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();

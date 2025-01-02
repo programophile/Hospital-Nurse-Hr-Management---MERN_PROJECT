@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchPayrolls, createPayroll, updatePayroll, deletePayroll, fetchNurses } from '../api';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import Navbar from './Navbar';  // Import the Navbar component
-import '../payroll.css';
+import './Payroll.css';
 
 const Payroll = () => {
     const navigate = useNavigate(); // Add useNavigate for redirection
