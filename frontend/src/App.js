@@ -15,9 +15,8 @@ import PayrollHistory from './components/PayrollHistory';
 import Navbar from './components/Navbar';
 import LeaveRequest from './components/LeaveRequest'; 
 import Attendance from './components/Attendance'; // Add this line
+import AdminLeaveHandle from './components/AdminLeaveHandle'; // Add this line
 // Placeholder components - create these later
-const NurseDashboard = () => <div>Nurse Dashboard</div>;
-const AdminDashboard = () => <div>Admin Dashboard</div>;
 
 
 const App = () => {
@@ -38,6 +37,7 @@ const App = () => {
         <Route path="/payrolls" element={<Payroll />} />
         <Route path="/leave-request" element={<LeaveRequest />} /> {/* Add this line */}
         <Route path="/attendance" element={<Attendance />} /> {/* Add this line */}
+        <Route path="/admin-leave-handle" element={<AdminLeaveHandle />} /> {/* Add this line */}
       </Routes>
     </Router>
   );
