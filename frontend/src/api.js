@@ -18,8 +18,15 @@ export const createLeave = (leave) => {
     return axios.post(`${API_URL}/leaves`, leave); // Ensure this matches your backend route
 };
 
-export const fetchUserPayrolls = (userId, month, year) => 
-    axios.get(`${API_URL}/payrolls/user/${userId}?month=${month}&year=${year}`); // Fetch payrolls for a specific user
+export const fetchUserPayrolls = (userId) => 
+    axios.get(`${API_URL}/payrolls/user/${userId}`); // Fetch payrolls for a specific user
+
+// Payslip download function
+export const downloadPayslip = (userId, month, year) =>
+    axios.get(`${API_URL}/payrolls/payslip/${userId}`, {
+        params: { month, year },
+        responseType: 'blob'
+    });
 
 // New functions for updating and deleting payrolls
 export const updatePayroll = (payrollId, payroll) => 

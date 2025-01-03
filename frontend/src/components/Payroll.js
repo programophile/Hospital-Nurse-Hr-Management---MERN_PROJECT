@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchPayrolls, createPayroll, updatePayroll, deletePayroll, fetchNurses } from '../api';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import Navbar from './Navbar';  // Import the Navbar component
-import '../payroll.css';
+import './Payroll.css';
 
 const Payroll = () => {
     const navigate = useNavigate(); // Add useNavigate for redirection
@@ -32,7 +32,7 @@ const Payroll = () => {
         const storedUser = JSON.parse(localStorage.getItem('user'));
         if (storedUser) {
             setUser(storedUser);
-            setNurseId(storedUser.id); // Set the Nurse ID from the user info
+            setNurseId(storedUser._id); // Set the Nurse ID from the user info
         }
 
         // Set the default month and year to the current values
