@@ -1,47 +1,168 @@
-// frontend/src/components/NurseProfile.js
 import React, { useState, useEffect } from 'react';
-import { fetchNurses, createNurse } from '../api';
+import axios from 'axios';
+import './NurseProfile.css';
 
 const NurseProfile = () => {
-    const [nurses, setNurses] = useState([]);
-    const [name, setName] = useState('');
-    const [qualifications, setQualifications] = useState('');
-    const [certifications, setCertifications] = useState('');
+  const [nurse, setNurse] = useState({});
+  const [specialty, setSpecialty] = useState('');
+  const [educationInstitution, setEducationInstitution] = useState('');
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
-    const loadNurses = async () => {
-        const response = await fetchNurses();
-        setNurses(response.data);
+  useEffect(() => {
+    const fetchNurseProfile = async () => {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await axios.get('http://localhost:5000/api/nurses/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        console.log('Fetched Nurse Data:', response.data); // Log the fetched data
+        setNurse(response.data);
+        setSpecialty(response.data.specialty || '');
+        setEducationInstitution(response.data.educationInstitution || '');
+      } catch (err) {
+        setError('Error fetching profile.');
+        console.error('Fetch Error:', err.response?.data || err.message); // Log the error
+      }
+      setLoading(false);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        await createNurse({ name, qualifications, certifications: certifications.split(',') });
-        loadNurses();
-        setName('');
-        setQualifications('');
-        setCertifications('');
-    };
+    fetchNurseProfile();
+  }, []);
 
-    useEffect(() => {
-        loadNurses();
-    }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
 
-    return (
-        <div>
-            <h2>Nurse Profiles</h2>
-            <form onSubmit={handleSubmit}>
-                <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
-                <input type="text" placeholder="Qualifications" value={qualifications} onChange={(e) => setQualifications(e.target.value)} />
-                <input type="text" placeholder="Certifications (comma separated)" value={certifications} onChange={(e) => setCertifications(e.target.value)} />
-                <button type="submit">Add Nurse</button>
-            </form>
-            <ul>
-                {nurses.map((nurse) => (
-                    <li key={nurse._id}>{nurse.name} - {nurse.qualifications}</li>
-                ))}
-            </ul>
+    // Append text fields
+    formData.append('specialty', specialty);
+    formData.append('educationInstitution', educationInstitution);
+
+    // Append the profile picture if it exists
+    if (profilePicture) {
+      formData.append('profilePicture', profilePicture);
+    }
+
+    try {
+      console.log('Nurse ID:', nurse._id); // Log the nurse ID
+      const response = await axios.put(`http://localhost:5000/api/nurses/${nurse._id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data' // Correct content type for file uploads
+        }
+      });
+
+      console.log('Server Response:', response.data); // Log the response
+      alert(response.data.message);
+
+      // Update the nurse's state with the new data
+      const updatedNurse = response.data.nurse;
+      updatedNurse.profilePicture = `http://localhost:5000/${updatedNurse.profilePicture}`; // Update the profile picture URL
+      setNurse(updatedNurse);
+      setIsEditing(false);
+    } catch (err) {
+      setError('Error updating profile.');
+      console.error('Update Error:', err.response?.data || err.message); // Log the error
+    }
+  };
+
+  const handleEditProfile = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
+
+  const handleEditProfilePicture = () => {
+    document.getElementById('profile-picture-input').click();
+  };
+
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfilePicture(file);
+
+      // Preview the new profile picture
+      const reader = new FileReader();
+      reader.onload = () => {
+        document.getElementById('profile-picture').src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const getProfilePictureUrl = (profilePicture) => {
+    if (!profilePicture) return ''; // Fallback for missing profile picture
+    if (profilePicture.startsWith('http')) {
+      return profilePicture; // Already a full URL
+    }
+    return `http://localhost:5000/${profilePicture}`; // Prepend base URL for relative paths
+  };
+  if (loading) return <div>Loading...</div>;
+  console.log('Profile Picture:', nurse.profilePicture);
+  return (
+    <div className="profile-container">
+      <div className="profile-header">
+        <div className="profile-picture">
+          <img
+            id="profile-picture"
+            src={getProfilePictureUrl(nurse.profilePicture)}
+            alt="Profile"
+          />
+          <input
+            type="file"
+            id="profile-picture-input"
+            onChange={handleProfilePictureChange}
+            style={{ display: 'none' }}
+          />
+          {isEditing && (
+            <div className="edit-profile-picture" onClick={handleEditProfilePicture}>
+              Edit Profile Picture
+            </div>
+          )}
         </div>
-    );
+        <div className="profile-info">
+          <h2>{nurse.firstName} {nurse.lastName}</h2>
+          <p>{specialty} at {educationInstitution}</p>
+        </div>
+      </div>
+      <div className="profile-bio">
+        <h3>Bio</h3>
+        <p>
+          {specialty} at {educationInstitution}
+        </p>
+      </div>
+      {isEditing && (
+        <form onSubmit={handleSubmit}>
+          <div className="profile-form">
+            <label>Specialty:</label>
+            <input
+              type="text"
+              value={specialty}
+              onChange={(e) => setSpecialty(e.target.value)}
+            />
+
+            <label>Education Institution:</label>
+            <input
+              type="text"
+              value={educationInstitution}
+              onChange={(e) => setEducationInstitution(e.target.value)}
+            />
+
+            <button type="submit">Save Changes</button>
+            <button type="button" onClick={handleCancelEdit}>Cancel</button>
+          </div>
+        </form>
+      )}
+      {!isEditing && (
+        <button onClick={handleEditProfile}>Edit Profile</button>
+      )}
+      {error && <div className="error">{error}</div>}
+    </div>
+  );
 };
 
 export default NurseProfile;

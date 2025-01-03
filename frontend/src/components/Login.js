@@ -18,10 +18,10 @@ const Login = () => {
 
       // Save token and user info
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.nurse));
+      localStorage.setItem('user', JSON.stringify(response.data.user)); // Use 'user' instead of 'nurse'
 
       // Redirect based on role
-      if (response.data.nurse.role === 'admin') {
+      if (response.data.user.role === 'admin') {
         navigate('/admin-dashboard');
       } else {
         navigate('/nurse-dashboard');
@@ -35,7 +35,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <form onSubmit={handleLogin}>
-        <h2>Nurse Login</h2>
+        <h2>Login</h2>
         {error && <p className="error">{error}</p>}
         <input
           type="email"

@@ -1,97 +1,102 @@
 import { Router } from 'express';
 import Nurse from '../models/Nurse.js';
+import Admin from '../models/Admin.js';
 import jwt from 'jsonwebtoken';
 const { sign } = jwt;
 
 const router = Router();
 
+// Registration Route
 router.post('/register', async (req, res) => {
   try {
-    console.log('Received Registration Data:', req.body);
-    
     const { 
       firstName, 
       lastName, 
       email, 
-      password, 
-      employeeId, 
+      password,  
       department,
-      contactNumber 
+      contactNumber,
+      role // Include role in the registration data
     } = req.body;
 
     // Validation
-    if (!firstName || !lastName || !email || !password || !employeeId) {
+    if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Additional detailed logging
-    console.log('Attempting to create nurse with email:', email);
+    let user;
+    if (role === 'admin') {
+      // Generate the next employee ID for admin
+      const employeeId = await Admin.generateEmployeeId();
+      user = new Admin({
+        firstName,
+        lastName,
+        email,
+        password,
+        employeeId,
+        department,
+        contactNumber,
+        role
+      });
+    } else {
+      // Generate the next employee ID for nurse
+      const employeeId = await Nurse.generateEmployeeId();
+      user = new Nurse({
+        firstName,
+        lastName,
+        email,
+        password,
+        employeeId,
+        department,
+        contactNumber,
+        role
+      });
+    }
 
-    // Create new nurse
-    const nurse = new Nurse({
-      firstName,
-      lastName,
-      email,
-      password,
-      employeeId,
-      department,
-      contactNumber
-    });
+    // Save the user (admin or nurse)
+    const savedUser  = await user.save();
 
-    // Save the nurse
-    const savedNurse = await nurse.save();
+    // Generate JWT
+    const token = sign(
+      { id: savedUser ._id, email: savedUser .email, role: savedUser .role },
+      process.env.JWT_SECRET || 'your_jwt_secret',
+      { expiresIn: '1h' }
+    );
 
-    console.log('Nurse saved successfully:', savedNurse);
-
-    res.status(201).json({ 
-      message: 'Nurse registered successfully',
-      nurseId: savedNurse._id 
+    res.status(201).json({
+      token,
+      user: {
+        id: savedUser ._id,
+        firstName: savedUser .firstName,
+        lastName: savedUser .lastName,
+        email: savedUser .email,
+        role: savedUser .role,
+        employeeId: savedUser .employeeId
+      }
     });
   } catch (error) {
-    console.error('Full Registration Error:', {
-      message: error.message,
-      name: error.name,
-      stack: error.stack,
-      // Log any additional error properties
-      code: error.code,
-      errors: error.errors
-    });
-
-    // Handle specific error types
-    if (error.name === 'ValidationError') {
-      return res.status(400).json({
-        message: 'Validation Error',
-        errors: Object.values(error.errors).map(err => err.message)
-      });
-    }
-
-    if (error.code === 11000) {
-      return res.status(400).json({
-        message: 'Duplicate key error',
-        duplicateField: Object.keys(error.keyValue)[0]
-      });
-    }
-
-    res.status(500).json({ 
-      message: 'Registration failed', 
-      error: error.message 
-    });
+    res.status(500).json({ message: 'Registration failed', error: error.message });
   }
 });
+
 // Login Route
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log('Login attempt with email:', email); // Log the login attempt
 
-    // Find nurse
-    const nurse = await Nurse.findOne({ email });
-    if (!nurse) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+    // Check if the user is a nurse
+    let user = await Nurse.findOne({ email });
+    if (!user) {
+      // If not a nurse, check if the user is an admin
+      user = await Admin.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ message: 'Invalid credentials' });
+      }
     }
 
     // Check password
-    const isMatch = await nurse.comparePassword(password);
+    const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
@@ -99,9 +104,9 @@ router.post('/login', async (req, res) => {
     // Generate JWT
     const token = sign(
       { 
-        id: nurse._id, 
-        email: nurse.email,
-        role: nurse.role 
+        id: user._id, 
+        email: user.email,
+        role: user.role 
       }, 
       process.env.JWT_SECRET || 'your_jwt_secret', 
       { expiresIn: '1h' }
@@ -109,12 +114,15 @@ router.post('/login', async (req, res) => {
 
     res.json({
       token,
-      nurse: {
-        _id: nurse._id,
-        firstName: nurse.firstName,
-        lastName: nurse.lastName,
-        email: nurse.email,
-        role: nurse.role
+
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        employeeId: user.employeeId
+
       }
     });
   } catch (error) {

@@ -1,3 +1,4 @@
+// src/components/Register.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -8,9 +9,9 @@ const Register = () => {
     lastName: '',
     email: '',
     password: '',
-    employeeId: '',
     department: '',
-    contactNumber: ''
+    contactNumber: '',
+    role: 'nurse' // Default role
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -22,10 +23,9 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('Submitting Registration Data:', formData); // Log data being sent
+      console.log('Submitting Registration Data:', formData);
       const response = await axios.post('http://localhost:5000/api/auth/register', formData);
-      
-      console.log('Registration Response:', response.data); // Log successful response
+      console.log('Registration Response:', response.data);
       navigate('/login');
     } catch (err) {
       console.error('Full Error Object:', err);
@@ -41,7 +41,7 @@ const Register = () => {
   return (
     <div className="register-container">
       <form onSubmit={handleSubmit}>
-        <h2>Nurse Registration</h2>
+        <h2>Nurse/Admin Registration</h2>
         {error && <p className="error">{error}</p>}
         <input
           type="text"
@@ -77,14 +77,6 @@ const Register = () => {
         />
         <input
           type="text"
-          name="employeeId"
-          placeholder="Employee ID"
-          value={formData.employeeId}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
           name="department"
           placeholder="Department"
           value={formData.department}
@@ -97,6 +89,10 @@ const Register = () => {
           value={formData.contactNumber}
           onChange={handleChange}
         />
+        <select name="role" value={formData.role} onChange={handleChange}>
+          <option value="nurse">Nurse</option>
+          <option value="admin">Admin</option>
+        </select>
         <button type="submit">Register</button>
         <p>Already have an account? <a href="/login">Login</a></p>
       </form>
