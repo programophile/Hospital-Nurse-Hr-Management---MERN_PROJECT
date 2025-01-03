@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:5001/api';
+const API_URL = 'http://localhost:5000/api';
 
 //hello dont change port number
 
@@ -16,10 +16,17 @@ export const fetchNurseByUserId = (userId) => {
 export const createLeave = (leave) => {
     return axios.post(`${API_URL}/leaves`, leave); // Ensure this matches your backend route
 };
-//export const createAttendance = (attendance) => axios.post(`${API_URL}/attendance`, attendance);
-//export const fetchAttendanceHistory = (nurseId) => axios.get(`${API_URL}/attendance/history`, { params: { nurseId } });
-export const fetchUserPayrolls = (userId, month, year) => 
-    axios.get(`${API_URL}/payrolls/user/${userId}?month=${month}&year=${year}`); // Fetch payrolls for a specific user
+
+
+export const fetchUserPayrolls = (userId) => 
+    axios.get(`${API_URL}/payrolls/user/${userId}`); // Fetch payrolls for a specific user
+
+// Payslip download function
+export const downloadPayslip = (userId, month, year) =>
+    axios.get(`${API_URL}/payrolls/payslip/${userId}`, {
+        params: { month, year },
+        responseType: 'blob'
+    });
 
 // New functions for updating and deleting payrolls
 export const updatePayroll = (payrollId, payroll) => 
