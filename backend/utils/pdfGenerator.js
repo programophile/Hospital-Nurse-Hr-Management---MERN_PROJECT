@@ -5,6 +5,7 @@ const generatePayslipPDF = (payroll) => {
         try {
             const doc = new PDFDocument({ margin: 50 });
             const buffers = [];
+            const downloadDate = new Date().toLocaleString();
             
             // Collect PDF data
             doc.on('data', buffers.push.bind(buffers));
@@ -13,11 +14,13 @@ const generatePayslipPDF = (payroll) => {
                 resolve(pdfData);
             });
 
-            // Add header
+            // Add company header
             doc.fontSize(18)
                .text('Hospital Nurse Management System', { align: 'center' });
+            doc.fontSize(12)
+               .text('123 Hospital Street, City, Country', { align: 'center' });
             doc.moveDown();
-            
+
             // Add payslip title
             doc.fontSize(14)
                .text('Payslip', { align: 'center' });
@@ -44,9 +47,28 @@ const generatePayslipPDF = (payroll) => {
                .text(`Net Pay: $${(payroll.salary + payroll.overtime - payroll.deductions).toFixed(2)}`, { bold: true });
             doc.moveDown();
 
-            // Add footer
+            // Add bank details
+            doc.fontSize(12)
+               .text(`Bank Name: BRAC BANK`);
+            doc.text(`Bank Account: 03838483839}`);
+            doc.text(`Bank Branch: Gulshan, Dhaka`);
+            doc.moveDown();
+
+            // Add signature
+            doc.fontSize(12)
+               .text('Signature:', { underline: true });
+            doc.image('/home/sad/Documents/GitHub/Hospital-Nurse-Management/backend/utils/signature.png', { width: 100 });
+            doc.moveDown(10);
+
+            // Add download date and time
             doc.fontSize(10)
-               .text('This is an automatically generated payslip. Please contact HR for any discrepancies.', { align: 'center' });
+               .text(`Generated on: ${downloadDate}`, { align: 'center' });
+            doc.moveDown();
+
+            // Add footer
+            doc.moveDown(4);
+            doc.fontSize(10)
+               .text('This is an automatically generated payslip. Please contact HR (hr@hospital.g.ac.bd) for any discrepancies.', { align: 'center' });
 
             doc.end();
         } catch (error) {
