@@ -4,6 +4,12 @@ import multer from 'multer';
 import authMiddleware from '../routes/authMiddleware.js'; // Import the middleware
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// Get the current file's directory (for ES modules)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const router = Router();
 
@@ -35,7 +41,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', upload.single('profilePicture'), async (req, res) => {
   const { id } = req.params;
   const { specialty, educationInstitution } = req.body;
-  const profilePicture = req.file ? req.file.path.replace(/\\/g, '/') : null; // Normalize path
+  const profilePicture = req.file ? req.file.path.replace(/\\/g, '/') : null;
 
   try {
     const nurse = await Nurse.findById(id);
@@ -45,9 +51,9 @@ router.put('/:id', upload.single('profilePicture'), async (req, res) => {
 
     // Delete the previous profile picture if it exists
     if (nurse.profilePicture) {
-      const previousImagePath = path.join(__dirname, '..', nurse.profilePicture);
+      const previousImagePath = path.resolve(__dirname, '..', nurse.profilePicture);
       if (fs.existsSync(previousImagePath)) {
-        fs.unlinkSync(previousImagePath); // Delete the file
+        fs.unlinkSync(previousImagePath);
       }
     }
 
@@ -64,10 +70,11 @@ router.put('/:id', upload.single('profilePicture'), async (req, res) => {
       message: 'Profile updated successfully',
       nurse: {
         ...nurse.toObject(),
-        profilePicture: `http://localhost:5000/${profilePicture}` // Return the full URL
-      }
+        profilePicture: profilePicture ? `http://localhost:5000/${profilePicture}` : null,
+      },
     });
   } catch (error) {
+    console.error('Error updating profile:', error);
     res.status(500).json({ message: 'Error updating profile', error: error.message });
   }
 });
@@ -92,28 +99,27 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Update Nurse Profile (alternative route)
-router.put('/:id', upload.single('profilePicture'), async (req, res) => {
-    const { id } = req.params;
-    const { specialty, educationInstitution } = req.body;
-    const profilePicture = req.file ? req.file.path : null; // Get the uploaded file path
-  
-    try {
-      const updateData = { specialty, educationInstitution };
-      if (profilePicture) {
-        updateData.profilePicture = profilePicture; // Add profile picture URL if uploaded
-      }
-  
-      const updatedNurse = await Nurse.findByIdAndUpdate(id, updateData, { new: true });
-      if (!updatedNurse) {
-        return res.status(404).json({ message: 'Nurse not found' });
-      }
-      res.status(200).json({ message: 'Profile updated successfully', nurse: updatedNurse });
-    } catch (error) {
-      res.status(500).json({ message: 'Error updating profile', error: error.message });
-    }
+router.get('/departments', async (req, res) => {
+  try {
+    const departments = await Nurse.distinct('department');
+    res.status(200).json(departments);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching departments', error: error.message });
+  }
 });
 
 // Add more routes for updating, deleting, searching, etc.
-
+// backend/routes/nurse.js
+// backend/routes/nurse.js
+router.get('/:id', async (req, res) => {
+  try {
+    const nurse = await Nurse.findById(req.params.id);
+    if (!nurse) {
+      return res.status(404).json({ message: 'Nurse not found' });
+    }
+    res.json(nurse);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching nurse', error: error.message });
+  }
+});
 export default router;

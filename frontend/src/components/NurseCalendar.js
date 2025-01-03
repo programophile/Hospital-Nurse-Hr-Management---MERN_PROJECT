@@ -55,7 +55,7 @@ return (
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
-      initialDate="2024-01-01"
+
       events={events}
       timeZone="UTC"
       dayCellClassNames={dayCellClassNames}
