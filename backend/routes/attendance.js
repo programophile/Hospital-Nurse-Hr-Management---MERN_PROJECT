@@ -5,9 +5,19 @@ import Nurse from '../models/Nurse.js';
 import mongoose from 'mongoose';
 
 const router = Router();
-//router.post('/', (req, res) => {
-//    res.status(200).json({ message: 'Test route works!' });
-//});
+
+// attendance.js
+router.get('/:nurseId', async (req, res) => {
+    try {
+        const nurseId = req.params.nurseId;
+        const attendanceHistory = await Attendance.find({ nurseId: nurseId });
+        const totalAttendance = await Attendance.countDocuments({ nurseId: nurseId });
+        res.json({ attendanceHistory, totalAttendance });
+    } catch (error) {
+        console.error('Error fetching attendance history:', error);
+        res.status(500).json({ message: 'Failed to load attendance history' });
+    }
+});
 // Mark attendance
 router.post('/', async (req, res) => {
     const { nurseId } = req.body;

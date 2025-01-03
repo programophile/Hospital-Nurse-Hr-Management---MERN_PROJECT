@@ -18,16 +18,18 @@ const Attendance = () => {
             checkTodayAttendance(storedUser.id);
         }
     }, []);
-
-    const loadAttendanceHistory = async (nurseId) => {
-        try {
-            const response = await fetchAttendanceHistory(nurseId);
-            setAttendanceHistory(response.data.attendances);
-            setTotalAttendance(response.data.totalAttendance);
-        } catch (error) {
-            console.error('Error fetching attendance history:', error);
-        }
-    };
+console.log('heheheh',totalAttendance)
+const loadAttendanceHistory = async (nurseId) => {
+    try {
+        const response = await fetchAttendanceHistory(nurseId);
+        console.log('Attendance history response:', response); // Add this log
+        setTotalAttendance(response.totalAttendance);
+        setAttendanceHistory(response.attendanceHistory);
+        
+    } catch (error) {
+        console.error('Error fetching attendance history:', error);
+    }
+};
 
     const checkTodayAttendance = (nurseId) => {
         const today = new Date().toDateString();

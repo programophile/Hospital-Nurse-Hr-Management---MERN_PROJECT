@@ -1,6 +1,6 @@
 import axios from 'axios';
+const API_URL = 'http://localhost:5001/api';
 
-const API_URL = 'http://localhost:5000/api';
 //hello dont change port number
 
 export const fetchNurses = () => axios.get(`${API_URL}/nurses`);
@@ -12,12 +12,12 @@ export const fetchLeaves = () => axios.get(`${API_URL}/leaves`);
 export const fetchPayrolls = () => axios.get(`${API_URL}/payrolls`);
 export const createPayroll = (payroll) => axios.post(`${API_URL}/payrolls`, payroll);
 export const fetchNurseByUserId = (userId) => {
-    return axios.get(`${API_URL}/nurses/user/${userId}`); // Update the endpoint to use userId
-  };
+    return axios.get(`${API_URL}/nurses/user/${userId}`);  };
 export const createLeave = (leave) => {
     return axios.post(`${API_URL}/leaves`, leave); // Ensure this matches your backend route
 };
-
+//export const createAttendance = (attendance) => axios.post(`${API_URL}/attendance`, attendance);
+//export const fetchAttendanceHistory = (nurseId) => axios.get(`${API_URL}/attendance/history`, { params: { nurseId } });
 export const fetchUserPayrolls = (userId, month, year) => 
     axios.get(`${API_URL}/payrolls/user/${userId}?month=${month}&year=${year}`); // Fetch payrolls for a specific user
 
@@ -27,3 +27,41 @@ export const updatePayroll = (payrollId, payroll) =>
 
 export const deletePayroll = (payrollId) => 
     axios.delete(`${API_URL}/payrolls/${payrollId}`);
+
+// Add these functions to your existing api/index.js file
+
+export const markAttendance = (data) => {
+    try {
+        const response = axios.post(`${API_URL}/attendance`, data);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// api.js
+export const fetchAttendanceHistory = async (nurseId) => {
+    try {
+        const response = await axios.get(`${API_URL}/attendance/${nurseId}`);
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            throw new Error(`Failed to load attendance history. Status code: ${response.status}`);
+        }
+    } catch (error) {
+        if (error.response) {
+            throw new Error(`Failed to load attendance history. Error: ${error.response.data.message}`);
+        } else {
+            throw new Error(`Failed to load attendance history. Error: ${error.message}`);
+        }
+    }
+};
+
+export const fetchAllAttendance = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/attendance`);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
