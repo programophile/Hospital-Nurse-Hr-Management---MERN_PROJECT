@@ -6,7 +6,7 @@ const LeaveSchema = new mongoose.Schema({
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
     reason: { type: String, enum: ['Sick Leave', 'Vacation', 'Personal Leave', 'Other'], required: true },
-    //status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
+    status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
 }, { timestamps: true });
 // Custom validation to ensure startDate is before endDate
 export default mongoose.model('Leave', LeaveSchema);

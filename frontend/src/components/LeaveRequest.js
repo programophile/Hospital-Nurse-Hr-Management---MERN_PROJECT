@@ -23,7 +23,9 @@ const LeaveRequest = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [leaves, setLeaves] = useState([]);
-  const [nurses, setNurses] = useState([]); // State to hold list of nurses
+  const [nurses, setNurses] = useState([]); 
+  const [status,setStatus]=useState(['Pending']);   // State to hold list of nurses
+  //const [status, setStatus] = useState('Pending');
 
   
   useEffect(() => {
@@ -62,7 +64,9 @@ const LeaveRequest = () => {
     nurseId, // Ensure this is the correct ID
     startDate,
     endDate,
-    reason
+    reason,
+    status: 'Pending',
+   //Set status to 'Pending' by default
 };
 
 console.log('Submitting leave request:', leaveData); // Log the leave data // Use user ID from user object
@@ -74,7 +78,9 @@ console.log('Submitting leave request:', leaveData); // Log the leave data // Us
       loadLeaves();
       setEndDate('');
       setStartDate('');
-      setReason(''); // Reload leaves after successful submission
+      setReason('');
+      setStatus('Pending');
+      //setStatus('Pending'); // Reload leaves after successful submission
     } catch (error) {
       console.error('Error creating leave request:', error);
       setErrorMessage('Error creating leave request. Please try again.');
@@ -131,9 +137,15 @@ console.log('Submitting leave request:', leaveData); // Log the leave data // Us
       <h3>Existing Leave Requests</h3>
       <ul>
         {leaves.map((leave) => (
-          <li key={ leave.id}>
-            {leave.startDate} to {leave.endDate} - {leave.reason}
-          </li>
+          leave.status ? ( // Check if status is defined
+            <li key={leave.id} className={`leave-item ${leave.status.toLowerCase()}`}>
+              <span>{leave.reason}</span>
+              <span>{leave.startDate} - {leave.endDate}</span>
+              <span className={`status ${leave.status.toLowerCase()}`}>
+                {leave.status}
+              </span>
+            </li>
+          ) : null
         ))}
       </ul>
     </div>

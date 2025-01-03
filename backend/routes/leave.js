@@ -1,24 +1,54 @@
 import { Router } from 'express';
 import Leave from '../models/Leave.js'; // Correctly import the Leave model
+import Nurse from '../models/Nurse.js'; // Correctly import the Nurse model
 const router = Router();
 
 // Create Leave Request
-router.post('/', async (req, res) => {
-    // Validate request body
+router.post ('/', async (req, res) => {
     const { nurseId, startDate, endDate, reason } = req.body;
-    if (!nurseId || !startDate || !endDate) {
-        return res.status(400).json({ message: 'Nurse ID, start date, and end date are required.' });
-    }
-
-    const leave = new Leave(req.body);
+    console.log('Request Body:', req.body);
+    //if (!nurseId || !startDate || !endDate) {
+        //return res.status(400).json({ message: 'Nurse ID, start date, and end date are required.' });
     try {
+        if (!nurseId) {
+            return res.status(400).json({ message: 'Nurse ID is required.' });
+        }
+        console.log('Received nurseId:', nurseId);
+        // Check if nurseId exists in the database
+        const nurse = await Nurse.findById(nurseId);
+        if (!nurse) {
+            return res.status(404).json({ message: 'Nurse not found'});
+        }
+        if (!startDate || !endDate) {
+            return res.status(400).json({ message: 'Start date and end date are required.' });
+        }
+        if (!reason) {
+            return res.status(400).json({ message: 'Reason is required.' });
+        }
+        const parsedStartDate = new Date(startDate);
+        const parsedEndDate = new Date(endDate);
+        if (isNaN(parsedStartDate) || isNaN(parsedEndDate)) {
+            return res.status(400).json({ message: 'Invalid date format.' });
+        }
+        if (parsedStartDate >= parsedEndDate) {
+            console.log('Start date must be before end date');
+            return res.status(400).json({ message: 'Start date must be before end date' });
+        }
+
+   // const leave = new Leave(req.body);
+    const leave = new Leave({
+        nurseId,
+        startDate,
+        endDate,
+        reason,
+        status: 'Pending',
+    });
         await leave.save();
         res.status(201).json({ message: 'Leave request created successfully', leave });
     } catch (error) {
-        res.status(400).json({ message: 'Error creating leave request', error: error.message });
+         res.status(400).json({ message: 'Error creating leave request', error: error.message });
     }
 });
-
 // Get All Leave Requests
 router.get('/', async (req, res) => {
     try {
