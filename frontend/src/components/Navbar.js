@@ -38,6 +38,7 @@ const Navbar = () => {
         <Link to="/">Home</Link>
         <Link to="/payrolls">Payroll</Link>
         <Link to="/leave-request">Leave Request</Link> {/* Add this line */}
+        <Link to="/attendance">Attendance</Link> {/* Add this line */}
         {user && (
           <>
             <span>Welcome, {user.firstName} {user.lastName}</span>
