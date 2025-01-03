@@ -55,7 +55,7 @@ const loadAttendanceHistory = async (nurseId) => {
             await loadAttendanceHistory(user.id);
         } catch (error) {
             console.error('Detailed error:', error.response?.data || error); // More detailed error logging
-            setErrorMessage('Error marking attendance. Please try again.');
+            setErrorMessage('Your attendance for today has already been recorded.');
         } finally {
             setLoading(false);
         }
