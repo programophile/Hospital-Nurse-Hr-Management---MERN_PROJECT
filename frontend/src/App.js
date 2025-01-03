@@ -1,44 +1,43 @@
-// import logo from './logo.svg';
-// import './App.css';
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
 // export default App;
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
+
 import NurseDashboard from './components/NurseDashboard';
 import AdminDashboard from './components/AdminDashboard'; // Import the new component
+
+import Payroll from './components/Payroll';
+import PayslipDownload from './components/PayslipDownload';
+import PayrollHistory from './components/PayrollHistory';
+import Navbar from './components/Navbar';
+import LeaveRequest from './components/LeaveRequest'; 
+import Attendance from './components/Attendance'; // Add this line
+// Placeholder components - create these later
+const NurseDashboard = () => <div>Nurse Dashboard</div>;
+const AdminDashboard = () => <div>Admin Dashboard</div>;
+
 
 const App = () => {
   return (
     <Router>
+       <Navbar />
+
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/nurse-dashboard" element={<NurseDashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} /> {/* Add Admin Dashboard route */}
         <Route path="/" element={<Login />} />
+
+       
+        <Route path="/payslip-download" element={<PayslipDownload />} />
+        <Route path="/payroll-history" element={<PayrollHistory />} />
+        <Route path="/payrolls" element={<Payroll />} />
+        <Route path="/leave-request" element={<LeaveRequest />} /> {/* Add this line */}
+        <Route path="/attendance" element={<Attendance />} /> {/* Add this line */}
       </Routes>
     </Router>
   );

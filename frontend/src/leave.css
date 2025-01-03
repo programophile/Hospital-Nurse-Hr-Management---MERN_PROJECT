@@ -1,0 +1,243 @@
+.leave-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .leave-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .input-field {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .leave-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .leave-item {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .leave-item.pending {
+    background-color: #fff3cd; /* Yellow for Pending */
+  }
+  
+  .leave-item.approved {
+    background-color: #d4edda; /* Green for Approved */
+  }
+  
+  .leave-item.denied {
+    background-color: #f8d7da; /* Red for Denied */
+  }
+  
+  .status {
+    font-weight: bold;
+  }
+  .leave-item.unknown {
+    background-color: #e2e3e5; /* Grey for Unknown status */
+}
+/* Container Styles */
+.leave-container,
+  .attendance-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Styles */
+.leave-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.leave-form input,
+.leave-form select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.leave-form input[type="date"] {
+    width: 100%;
+}
+
+/* Button Styles */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button.disabled,
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* List Styles */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.leave-item,
+.attendance-record {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    border-left: 4px solid #4CAF50;
+}
+
+/* Status Styles */
+.status {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.status.pending {
+    background-color: #ffd700;
+    color: #000;
+}
+
+.status.approved {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.status.rejected {
+    background-color: #f44336;
+    color: white;
+}
+
+.status.present {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Message Styles */
+.success-message {
+    color: #4CAF50;
+    background-color: #e8f5e9;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.error-message {
+    color: #f44336;
+    background-color: #ffebee;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+/* Attendance Specific Styles */
+.attendance-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.attendance-info {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.attendance-action {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.attendance-history {
+    margin-top: 20px;
+}
+
+.attendance-history h3 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Headings */
+h2, h3 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .leave-container,
+    .attendance-container {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .leave-item,
+    .attendance-record {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .status {
+        align-self: flex-end;
+    }
+}
+
+/* Input Field Focus States */
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}
+
+/* Hover Effects */
+.leave-item:hover,
+.attendance-record:hover {
+    transform: translateX(5px);
+    transition: transform 0.2s ease;
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}

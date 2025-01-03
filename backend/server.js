@@ -9,7 +9,7 @@ import nurseRoutes from './routes/nurse.js';
 import shiftRoutes from './routes/shift.js';
 import leaveRoutes from './routes/leave.js';
 import payrollRoutes from './routes/payroll.js';
-
+import attendanceRoutes from './routes/attendance.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -40,7 +40,7 @@ app.use('/api/nurses', nurseRoutes);
 app.use('/api/shifts', shiftRoutes);
 app.use('/api/leaves', leaveRoutes);
 app.use('/api/payrolls', payrollRoutes);
-
+app.use('/api/attendance', attendanceRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -48,6 +48,7 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
 
 // Connect to MongoDB
 if (!process.env.MONGODB_URI) {

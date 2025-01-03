@@ -83,6 +83,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log('Login attempt with email:', email); // Log the login attempt
 
     // Check if the user is a nurse
     let user = await Nurse.findOne({ email });
@@ -113,6 +114,7 @@ router.post('/login', async (req, res) => {
 
     res.json({
       token,
+
       user: {
         id: user._id,
         firstName: user.firstName,
@@ -120,6 +122,7 @@ router.post('/login', async (req, res) => {
         email: user.email,
         role: user.role,
         employeeId: user.employeeId
+
       }
     });
   } catch (error) {
