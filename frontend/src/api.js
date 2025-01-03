@@ -49,6 +49,17 @@ export const fetchDepartments = async () => {
       throw error;
     }
   };
+
+  // frontend/src/api.js
+export const updateShift = async (shiftId, shiftData) => {
+  try {
+    const response = await axios.put(`${API_URL}/shifts/${shiftId}`, shiftData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating shift:', error);
+    throw error;
+  }
+};
 export const createShift = (shift) => axios.post(`${API_URL}/shifts`, shift);
 export const fetchLeaves = () => axios.get(`${API_URL}/leaves`);
 export const createLeave = (leave) => axios.post(`${API_URL}/leaves`, leave);
