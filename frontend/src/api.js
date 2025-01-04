@@ -11,6 +11,7 @@ export const fetchNurses = async () => {
       throw error;
     }
   };
+
 export const fetchDepartments = async () => {
     try {
       const response = await axios.get(`${API_URL}/nurses/departments`);
@@ -20,12 +21,12 @@ export const fetchDepartments = async () => {
       throw error;
     }
   };
-  export const fetchShifts = async () => {
+  export const fetchShifts = async (nurseId) => {
     try {
-      const response = await axios.get(`${API_URL}/shifts`);
+      const response = await axios.get(`${API_URL}/shifts?nurseId=${nurseId}`);
       const shifts = response.data;
       const nursePromises = shifts.map((shift) => {
-        console.log('nurseId:', shift.nurseId._id);
+        console.log('nurseIdCHECK:', shift.nurseId._id);
         return axios.get(`${API_URL}/nurses/${shift.nurseId._id}`);
       });
       console.log('nursePromises:', nursePromises);

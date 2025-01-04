@@ -15,11 +15,15 @@ const Login = () => {
         email,
         password
       });
-
+      console.log('Response Data:', response.data.user.id);
+  
       // Save token and user info
-      localStorage.setItem('token', response.data.token);
+      await localStorage.setItem('token', response.data.token);
+      await localStorage.setItem('nurseId', response.data.user.id);
+      console.log('Nurse ID stored in local storage:', localStorage.getItem('nurseId'));
+  
       localStorage.setItem('user', JSON.stringify(response.data.user)); // Use 'user' instead of 'nurse'
-
+  
       // Redirect based on role
       if (response.data.user.role === 'admin') {
         navigate('/admin-dashboard');
@@ -31,7 +35,6 @@ const Login = () => {
       console.error(err);
     }
   };
-
   return (
     <div className="login-container">
       <form onSubmit={handleLogin}>
