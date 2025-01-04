@@ -17,6 +17,8 @@ const LeaveRequest = () => {
   }, []);
   const [user, setUser ] = useState(null); // Store user object
   const [nurseId, setNurseId] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [reason, setReason] = useState('');
@@ -24,15 +26,18 @@ const LeaveRequest = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [leaves, setLeaves] = useState([]);
   const [nurses, setNurses] = useState([]); 
-  const [status,setStatus]=useState(['Pending']);   // State to hold list of nurses
-  //const [status, setStatus] = useState('Pending');
+  //const [status,setStatus]=useState(['Pending']);   // State to hold list of nurses
+  const [status, setStatus] = useState('Pending');
 
   
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
       if (storedUser) {
       setUser(storedUser);
-      setNurseId(storedUser.id); // Set the Nurse ID from the user info
+      setNurseId(storedUser.id);
+      setFirstName(storedUser.firstName)
+      setLastName(storedUser.lastName)
+      console.log('gogogo',storedUser) // Set the Nurse ID from the user info
   }
   if (storedUser && storedUser.role === 'admin') {
                 fetchNurses().then((response) => {
@@ -61,7 +66,9 @@ const LeaveRequest = () => {
     e.preventDefault();
     console.log('Submitting leave request:', { nurseId, startDate, endDate, reason }); 
   const leaveData = {
-    nurseId, // Ensure this is the correct ID
+    nurseId,
+    //firstName,
+    //lastName,               // Ensure this is the correct ID
     startDate,
     endDate,
     reason,
@@ -91,7 +98,7 @@ console.log('Submitting leave request:', leaveData); // Log the leave data // Us
     }, [user]); 
   // Fetch user information on component mount
   // Load leaves on component mount
-
+console.log('leaves er vitor',leaves)
   return (
     <div className="leave-container"> {/* Add class for styling */}
       <h2>Leave Request</h2>
@@ -135,12 +142,14 @@ console.log('Submitting leave request:', leaveData); // Log the leave data // Us
         <p>Please log in to submit a leave request.</p>
       )}
       <h3>Existing Leave Requests</h3>
+      <h4>Please submit your leave request in a timely manner to ensure that the allocated slot is not vacant for an entire day.</h4> 
       <ul>
         {leaves.map((leave) => (
           leave.status ? ( // Check if status is defined
             <li key={leave.id} className={`leave-item ${leave.status.toLowerCase()}`}>
+              <span>Name:{leave.nurseId.firstName} {leave.nurseId.lastName}</span>
               <span>{leave.reason}</span>
-              <span>{leave.startDate} - {leave.endDate}</span>
+              <span>{new Date(leave.startDate).toLocaleDateString()} to {new Date(leave.endDate).toLocaleDateString()}</span>
               <span className={`status ${leave.status.toLowerCase()}`}>
                 {leave.status}
               </span>

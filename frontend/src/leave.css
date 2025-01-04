@@ -39,7 +39,7 @@
     background-color: #d4edda; /* Green for Approved */
   }
   
-  .leave-item.denied {
+  .leave-item.rejected {
     background-color: #f8d7da; /* Red for Denied */
   }
   
@@ -241,3 +241,88 @@ select:focus {
     padding: 20px;
     color: #666;
 }
+.admin-leave-handle-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-leave-handle-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .admin-leave-handle-item {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .admin-leave-handle-item.pending {
+    background-color: #fff3cd; /* Yellow for Pending */
+  }
+  
+  .admin-leave-handle-item.approved {
+    background-color: #d4edda; /* Green for Approved */
+  }
+  
+  .admin-leave-handle-item.rejected {
+    background-color: #ea8f97; /* Red for Denied */
+  }
+  
+  .admin-leave-handle-name {
+    font-weight: bold;
+  }
+  
+  .admin-leave-handle-dates {
+    font-size: 14px;
+  }
+  
+  .admin-leave-handle-reason {
+    font-size: 14px;
+  }
+  
+  .admin-leave-handle-status {
+    font-weight: bold;
+  }
+  
+  .admin-leave-handle-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .admin-leave-handle-actions button {
+    flex: 1;
+    margin: 0 5px;
+  }
+  .date-search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .date-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  .search-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
+  }
