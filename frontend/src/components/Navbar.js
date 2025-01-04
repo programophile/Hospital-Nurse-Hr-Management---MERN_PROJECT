@@ -5,7 +5,7 @@ import './Navbar.css'; // Import CSS for styling
 
 const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false); // Keep this line for mobile menu state
-  const { user, logout } = useAuth();
+  const { user, logout, setUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
