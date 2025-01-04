@@ -10,6 +10,7 @@ import shiftRoutes from './routes/shift.js';
 import leaveRoutes from './routes/leave.js';
 import payrollRoutes from './routes/payroll.js';
 import attendanceRoutes from './routes/attendance.js';
+import approvePayrollRoutes from './routes/approvePayroll.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use('/api/shifts', shiftRoutes);
 app.use('/api/leaves', leaveRoutes);
 app.use('/api/payrolls', payrollRoutes);
 app.use('/api/attendance', attendanceRoutes);
+app.use('/api/payroll/approve', approvePayrollRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);

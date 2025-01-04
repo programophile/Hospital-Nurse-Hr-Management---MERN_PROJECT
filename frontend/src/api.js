@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 export const fetchNurses = async () => {
     try {
       const response = await axios.get(`${API_URL}/nurses`);
@@ -8,6 +9,18 @@ export const fetchNurses = async () => {
       throw error;
     }
   };
+
+const API_URL = 'http://localhost:5000/api';
+// export const fetchNurses = async () => {
+//     try {
+//       const response = await axios.get(`${API_URL}/nurses`);
+//       return response.data;
+//     } catch (error) {
+//       console.error('Error fetching nurses:', error);
+//       throw error;
+//     }
+//   };
+
 export const fetchDepartments = async () => {
     try {
       const response = await axios.get(`${API_URL}/nurses/departments`);
@@ -61,7 +74,11 @@ export const updateShift = async (shiftId, shiftData) => {
 
 //export const fetchNurses = () => axios.get(`${API_URL}/nurses`);
 export const createNurse = (nurse) => axios.post(`${API_URL}/nurses`, nurse);
+
 //export const fetchShifts = () => axios.get(`${API_URL}/shifts`);
+
+// export const fetchShifts = () => axios.get(`${API_URL}/shifts`);
+
 
 export const createShift = (shift) => axios.post(`${API_URL}/shifts`, shift);
 export const fetchLeaves = () => axios.get(`${API_URL}/leaves`);
@@ -134,6 +151,7 @@ export const fetchAllAttendance = async () => {
 };
 // Add these functions to your existing api/index.js file
 
+
 export const updateLeaveStatus = async (leaveId, newStatus) => {
   try {
     const response = await axios.put(`${API_URL}/leaves/${leaveId}`, { status: newStatus });
@@ -143,3 +161,8 @@ export const updateLeaveStatus = async (leaveId, newStatus) => {
     throw error;
   }
 };
+
+export const approvePayroll = (payrollId) => {
+  return axios.put(`${API_URL}/payroll/approve/${payrollId}`, { status: 'Approved' });
+};
+
