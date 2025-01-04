@@ -36,14 +36,11 @@ const Navbar = () => {
     <nav>
       <div className="navbar">
         <Link to="/">Home</Link>
-        <Link to="/payrolls">Payroll</Link>
-
+        {user && user.role !== 'nurse' && <Link to="/payrolls">Payroll</Link>}
         <Link to="/payroll-history">Payroll History</Link>
         <Link to="/payslip-download">Download Payslip</Link>
-
-        <Link to="/leave-request">Leave Request</Link> {/* Add this line */}
-
-        <Link to="/attendance">Attendance</Link> {/* Add this line */}
+        <Link to="/leave-request">Leave Request</Link>
+        <Link to="/attendance">Attendance</Link>
 
         {user && (
           <>
@@ -59,7 +56,7 @@ const Navbar = () => {
       {isMobile && (
         <div className="mobile-menu">
           <Link to="/">Home</Link>
-          <Link to="/payrolls">Payroll</Link>
+          {user && user.role !== 'nurse' && <Link to="/payrolls">Payroll</Link>}
           <Link to="/payslip-download">Download Payslip</Link>
           {!user && <Link to="/login">Login</Link>}
         </div>

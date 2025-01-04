@@ -16,8 +16,8 @@ import Navbar from './components/Navbar';
 import LeaveRequest from './components/LeaveRequest'; 
 import Attendance from './components/Attendance'; // Add this line
 // Placeholder components - create these later
-const NurseDashboard = () => <div>Nurse Dashboard</div>;
-const AdminDashboard = () => <div>Admin Dashboard</div>;
+// const NurseDashboard = () => <div>Nurse Dashboard</div>;
+// const AdminDashboard = () => <div>Admin Dashboard</div>;
 
 
 const App = () => {

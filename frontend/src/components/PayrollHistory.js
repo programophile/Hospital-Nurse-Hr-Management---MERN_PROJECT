@@ -19,7 +19,7 @@ const PayrollHistory = () => {
         console.log('Stored user:', storedUser);
         if (storedUser) {
             console.log('User found in localStorage');
-            console.log('User ID:', storedUser._id);
+            console.log('User ID:', storedUser.id);
         } else {
             console.log('No user found in localStorage');
         }
@@ -34,8 +34,8 @@ const PayrollHistory = () => {
         console.log('User set:', storedUser);
         
         // Only load payrolls after user is confirmed to exist
-        if (storedUser && storedUser._id) {
-            console.log('Loading payrolls for user ID:', storedUser._id);
+        if (storedUser && storedUser.id) {
+            console.log('Loading payrolls for user ID:', storedUser.id);
             loadPayrolls();
         }
     }, [navigate]);
@@ -44,7 +44,7 @@ const PayrollHistory = () => {
         // Get current user from state or localStorage
         const currentUser = user || JSON.parse(localStorage.getItem('user'));
         
-        if (!currentUser || !currentUser._id) {
+        if (!currentUser || !currentUser.id) {
             setError('User information is not available');
             return;
         }
@@ -52,8 +52,8 @@ const PayrollHistory = () => {
         setLoading(true);
         setError(null);
         try {
-            console.log('Fetching payroll history for user:', currentUser._id);
-            const response = await fetchUserPayrolls(currentUser._id);
+            console.log('Fetching payroll history for user:', currentUser.id);
+            const response = await fetchUserPayrolls(currentUser.id);
             setPayrolls(response.data);
         } catch (error) {
             console.error('Error fetching payroll history:', error);
