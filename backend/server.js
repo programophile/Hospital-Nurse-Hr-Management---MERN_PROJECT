@@ -9,10 +9,10 @@ import nurseRoutes from './routes/nurse.js';
 import shiftRoutes from './routes/shift.js';
 import leaveRoutes from './routes/leave.js';
 import payrollRoutes from './routes/payroll.js';
-
+import attendanceRoutes from './routes/attendance.js';
 import dotenv from 'dotenv';
 dotenv.config();
-
+console.log('Server file executed');
 // Initialize app
 const app = express();
 
@@ -40,6 +40,7 @@ app.use('/api/nurses', nurseRoutes);
 app.use('/api/shifts', shiftRoutes);
 app.use('/api/leaves', leaveRoutes);
 app.use('/api/payrolls', payrollRoutes);
+app.use('/api/attendance', attendanceRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -77,3 +78,7 @@ connect(process.env.MONGODB_URI)
     .catch(err => {
         console.error('MongoDB connection error:', err);
     });
+app.use((req, res, next) => {
+    console.log('Request URL:', req.url);
+    next();
+  });

@@ -27,7 +27,13 @@
   border-radius: 8px; /* Optional: Add rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
 }
+.fc-event.shift-covered.fc-event-bg {
+  background-color: green;
+}
 
+.fc-event.shift-not-covered.fc-event-bg {
+  background-color: red;
+}
 .fc-event {
   font-size: 12px; /* Reduce the font size */
   padding: 4px; /* Add padding to the event */

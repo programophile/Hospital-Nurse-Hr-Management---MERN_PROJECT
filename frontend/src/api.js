@@ -50,7 +50,23 @@ export const fetchDepartments = async () => {
       throw error;
     }
   };
-
+  export const fetchAttendanceHistory = async (nurseId) => {
+    try {
+        console.log("Fetchattendance being called")
+        const response = await axios.get(`http://localhost:5000/api/attendance/${nurseId}`);
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            throw new Error(`Failed to load attendance history. Status code: ${response.status}`);
+        }
+    } catch (error) {
+        if (error.response) {
+            throw new Error(`Failed to load attendance history. Error: ${error.response.data.message}`);
+        } else {
+            throw new Error(`Failed to load attendance history. Error: ${error.message}`);
+        }
+    }
+};
   // frontend/src/api.js
 export const updateShift = async (shiftId, shiftData) => {
   try {
