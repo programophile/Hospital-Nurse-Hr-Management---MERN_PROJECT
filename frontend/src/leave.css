@@ -299,3 +299,30 @@ select:focus {
     flex: 1;
     margin: 0 5px;
   }
+  .date-search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .date-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  .search-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
+  }
