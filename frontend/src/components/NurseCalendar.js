@@ -79,7 +79,6 @@ const NurseCalendar = () => {
             title: title ,
             start: startDateTime.toISOString(),
             end: endDateTime.toISOString(),
-
           };
         });
 
