@@ -31,6 +31,7 @@ const AdminLeaveHandle = () => {
   useEffect(() => {
     loadLeaves();
   }, []);
+  //search query
   const filteredLeaves = leaves.filter((leave) => {
     const nurseName = `${leave.nurseId.firstName} ${leave.nurseId.lastName}`;
     const reason = leave.reason;
