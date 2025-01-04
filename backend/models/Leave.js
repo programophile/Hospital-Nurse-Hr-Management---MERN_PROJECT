@@ -8,5 +8,9 @@ const LeaveSchema = new mongoose.Schema({
     reason: { type: String, enum: ['Sick Leave', 'Vacation', 'Personal Leave', 'Other'], required: true },
     status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
 }, { timestamps: true });
+LeaveSchema.virtual('nurseName').get(function() {
+    return this.nurseId.firstName + ' ' + this.nurseId.lastName;
+  });
+  
 // Custom validation to ensure startDate is before endDate
 export default mongoose.model('Leave', LeaveSchema);

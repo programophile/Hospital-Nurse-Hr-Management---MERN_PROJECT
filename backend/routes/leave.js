@@ -16,6 +16,8 @@ router.post ('/', async (req, res) => {
         console.log('Received nurseId:', nurseId);
         // Check if nurseId exists in the database
         const nurse = await Nurse.findById(nurseId);
+        //const firstName =await Nurse.firstName;
+        //const lastName =await Nurse.lastName;
         if (!nurse) {
             return res.status(404).json({ message: 'Nurse not found'});
         }
@@ -38,6 +40,8 @@ router.post ('/', async (req, res) => {
    // const leave = new Leave(req.body);
     const leave = new Leave({
         nurseId,
+        firstName,
+        lastName,
         startDate,
         endDate,
         reason,
@@ -52,27 +56,43 @@ router.post ('/', async (req, res) => {
 // Get All Leave Requests
 router.get('/', async (req, res) => {
     try {
-        const leaves = await Leave.find().populate('nurseId'); // Use Leave.find() here
-        res.status(200).json(leaves);
+    console.log('Leaves array hiih', leaves);
+      const leaves = await Leave.find().populate({
+        path: 'nurseId',
+        model: Nurse,
+        select: 'firstName'
+      });
+      console.log('Leaves array', leaves);
+       // Populate nurseId with firstName and lastName
+      res.status(200).json(leaves);
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching leave requests', error: error.message });
+      res.status(500).json({ message: 'Error fetching leave requests', error: error.message });
     }
-});
-
+  });
+// Get Nurse's Leave Requests
+router.get('/nurse/:nurseId', async (req, res) => {
+    try {
+      const nurseId = req.params.nurseId;
+      const leaves = await Leave.find({ nurseId });
+      res.status(200).json(leaves);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching nurse leaves', error: error.message });
+    }
+  });
 // Add more routes for updating, deleting, etc.
 // Example for updating a leave request
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const updatedLeave = await Leave.findByIdAndUpdate(id, req.body, { new: true });
-        if (!updatedLeave) {
-            return res.status(404).json({ message: 'Leave request not found' });
-        }
-        res.status(200).json({ message: 'Leave request updated successfully', updatedLeave });
-    } catch (error) {
-        res.status(400).json({ message: 'Error updating leave request', error: error.message });
-    }
-});
+// router.put('/:id', async (req, res) => {
+//     const { id } = req.params;
+//     try {
+//         const updatedLeave = await Leave.findByIdAndUpdate(id, req.body, { new: true });
+//         if (!updatedLeave) {
+//             return res.status(404).json({ message: 'Leave request not found' });
+//         }
+//         res.status(200).json({ message: 'Leave request updated successfully', updatedLeave });
+//     } catch (error) {
+//         res.status(400).json({ message: 'Error updating leave request', error: error.message });
+//     }
+// });
 
 // Example for deleting a leave request
 router.delete('/:id', async (req, res) => {
@@ -87,5 +107,22 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ message: 'Error deleting leave request', error: error.message });
     }
 });
+// Add this route to your existing Leave.js file
 
+// Add this route to your existing Leave.js file
+
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    try {
+      const updatedLeave = await Leave.findByIdAndUpdate(id, { status }, { new: true });
+      if (!updatedLeave) {
+        return res.status(404).json({ message: 'Leave request not found' });
+      }
+      res.status(200).json(updatedLeave);
+    } catch (error) {
+      console.error('Error updating leave status:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
 export default router;
