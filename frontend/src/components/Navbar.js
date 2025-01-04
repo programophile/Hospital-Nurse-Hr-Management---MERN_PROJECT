@@ -37,6 +37,7 @@ const Navbar = () => {
       <div className="navbar">
         <Link to="/">Home</Link>
         {user && user.role !== 'nurse' && <Link to="/payrolls">Payroll</Link>}
+        <Link to="/admin-payroll">Admin Payroll</Link>
         <Link to="/payroll-history">Payroll History</Link>
         <Link to="/payslip-download">Download Payslip</Link>
         <Link to="/leave-request">Leave Request</Link>
