@@ -43,7 +43,7 @@ const NurseCalendar = () => {
           const startDate = moment(shift.date, 'YYYY-MM-DD');
           const startTime = moment(shift.startTime, 'HH:mm');
           const endTime = moment(shift.endTime, 'HH:mm');
-
+          //a
           const startDateTime = moment.utc(`${startDate.format('YYYY-MM-DD')}T${shift.startTime}`).toDate();
           const endDateTime = moment.utc(`${startDate.format('YYYY-MM-DD')}T${shift.endTime}`).toDate();
           const attendanceStatus =
