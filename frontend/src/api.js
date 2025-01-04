@@ -139,22 +139,22 @@ export const markAttendance = (data) => {
 };
 
 // api.js
-export const fetchAttendanceHistory = async (nurseId) => {
-    try {
-        const response = await axios.get(`${API_URL}/attendance/${nurseId}`);
-        if (response.status === 200) {
-            return response.data;
-        } else {
-            throw new Error(`Failed to load attendance history. Status code: ${response.status}`);
-        }
-    } catch (error) {
-        if (error.response) {
-            throw new Error(`Failed to load attendance history. Error: ${error.response.data.message}`);
-        } else {
-            throw new Error(`Failed to load attendance history. Error: ${error.message}`);
-        }
-    }
-};
+// export const fetchAttendanceHistory = async (nurseId) => {
+//     try {
+//         const response = await axios.get(`${API_URL}/attendance/${nurseId}`);
+//         if (response.status === 200) {
+//             return response.data;
+//         } else {
+//             throw new Error(`Failed to load attendance history. Status code: ${response.status}`);
+//         }
+//     } catch (error) {
+//         if (error.response) {
+//             throw new Error(`Failed to load attendance history. Error: ${error.response.data.message}`);
+//         } else {
+//             throw new Error(`Failed to load attendance history. Error: ${error.message}`);
+//         }
+//     }
+// };
 
 export const fetchAllAttendance = async () => {
     try {
