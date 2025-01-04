@@ -17,6 +17,8 @@ const LeaveRequest = () => {
   }, []);
   const [user, setUser ] = useState(null); // Store user object
   const [nurseId, setNurseId] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [reason, setReason] = useState('');
@@ -24,15 +26,18 @@ const LeaveRequest = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [leaves, setLeaves] = useState([]);
   const [nurses, setNurses] = useState([]); 
-  const [status,setStatus]=useState(['Pending']);   // State to hold list of nurses
-  //const [status, setStatus] = useState('Pending');
+  //const [status,setStatus]=useState(['Pending']);   // State to hold list of nurses
+  const [status, setStatus] = useState('Pending');
 
   
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
       if (storedUser) {
       setUser(storedUser);
-      setNurseId(storedUser.id); // Set the Nurse ID from the user info
+      setNurseId(storedUser.id);
+      setFirstName(storedUser.firstName)
+      setLastName(storedUser.lastName)
+      console.log('gogogo',storedUser) // Set the Nurse ID from the user info
   }
   if (storedUser && storedUser.role === 'admin') {
                 fetchNurses().then((response) => {
@@ -61,7 +66,9 @@ const LeaveRequest = () => {
     e.preventDefault();
     console.log('Submitting leave request:', { nurseId, startDate, endDate, reason }); 
   const leaveData = {
-    nurseId, // Ensure this is the correct ID
+    nurseId,
+    //firstName,
+    //lastName,               // Ensure this is the correct ID
     startDate,
     endDate,
     reason,

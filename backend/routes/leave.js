@@ -16,6 +16,8 @@ router.post ('/', async (req, res) => {
         console.log('Received nurseId:', nurseId);
         // Check if nurseId exists in the database
         const nurse = await Nurse.findById(nurseId);
+        //const firstName =await Nurse.firstName;
+        //const lastName =await Nurse.lastName;
         if (!nurse) {
             return res.status(404).json({ message: 'Nurse not found'});
         }
@@ -38,6 +40,8 @@ router.post ('/', async (req, res) => {
    // const leave = new Leave(req.body);
     const leave = new Leave({
         nurseId,
+        firstName,
+        lastName,
         startDate,
         endDate,
         reason,
@@ -52,7 +56,12 @@ router.post ('/', async (req, res) => {
 // Get All Leave Requests
 router.get('/', async (req, res) => {
     try {
-      const leaves = await Leave.find().populate('nurseId', 'firstName lastName');
+    console.log('Leaves array hiih', leaves);
+      const leaves = await Leave.find().populate({
+        path: 'nurseId',
+        model: Nurse,
+        select: 'firstName'
+      });
       console.log('Leaves array', leaves);
        // Populate nurseId with firstName and lastName
       res.status(200).json(leaves);
