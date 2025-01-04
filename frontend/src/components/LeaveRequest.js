@@ -28,6 +28,7 @@ const LeaveRequest = () => {
   const [nurses, setNurses] = useState([]); 
   //const [status,setStatus]=useState(['Pending']);   // State to hold list of nurses
   const [status, setStatus] = useState('Pending');
+  const [searchQuery, setSearchQuery] = useState('');
 
   
   useEffect(() => {
@@ -37,6 +38,7 @@ const LeaveRequest = () => {
       setNurseId(storedUser.id);
       setFirstName(storedUser.firstName)
       setLastName(storedUser.lastName)
+      setSearchQuery(`${storedUser.firstName} ${storedUser.lastName}`);
       console.log('gogogo',storedUser) // Set the Nurse ID from the user info
   }
   if (storedUser && storedUser.role === 'admin') {
@@ -48,7 +50,13 @@ const LeaveRequest = () => {
             }
         }, []);
 
-
+        const filteredLeaves = leaves.filter((leave) => {
+          const nurseName = `${leave.nurseId.firstName} ${leave.nurseId.lastName}`;
+          return (
+            nurseName.toLowerCase().includes(searchQuery.toLowerCase())
+      
+          );
+        });
 
   // Load existing leaves
   const loadLeaves = async () => {
@@ -101,18 +109,19 @@ console.log('Submitting leave request:', leaveData); // Log the leave data // Us
 console.log('leaves er vitor',leaves)
   return (
     <div className="leave-container"> {/* Add class for styling */}
-      <h2>Leave Request</h2>
+      <h2>Leave Request Form</h2>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       {successMessage && <p>{successMessage}</p>}
       {user ? (
         <form onSubmit={handleSubmit} className="leave-form"> {/* Add class for styling */}
-          <input
+          {/* <input
             type="text"
             placeholder="User "
             value={user ? `${user.firstName} ${user.lastName}` : 'Loading...'}
             disabled
             className="input-field"
-          />
+          /> */}
+          
           <input
             type="date"
             value={startDate}
@@ -143,8 +152,16 @@ console.log('leaves er vitor',leaves)
       )}
       <h3>Existing Leave Requests</h3>
       <h4>Please submit your leave request in a timely manner to ensure that the allocated slot is not vacant for an entire day.</h4> 
+      <input
+        type="text"
+        placeholder="Search by name or reason"
+        value={searchQuery}
+        disabled
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="search-input"
+      />
       <ul>
-        {leaves.map((leave) => (
+        {filteredLeaves.map((leave) => (
           leave.status ? ( // Check if status is defined
             <li key={leave.id} className={`leave-item ${leave.status.toLowerCase()}`}>
               <span>Name:{leave.nurseId.firstName} {leave.nurseId.lastName}</span>
