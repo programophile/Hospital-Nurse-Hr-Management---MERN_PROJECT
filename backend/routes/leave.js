@@ -69,7 +69,16 @@ router.get('/', async (req, res) => {
       res.status(500).json({ message: 'Error fetching leave requests', error: error.message });
     }
   });
-
+// Get Nurse's Leave Requests
+router.get('/nurse/:nurseId', async (req, res) => {
+    try {
+      const nurseId = req.params.nurseId;
+      const leaves = await Leave.find({ nurseId });
+      res.status(200).json(leaves);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching nurse leaves', error: error.message });
+    }
+  });
 // Add more routes for updating, deleting, etc.
 // Example for updating a leave request
 // router.put('/:id', async (req, res) => {

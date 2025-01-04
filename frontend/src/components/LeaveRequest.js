@@ -98,7 +98,7 @@ console.log('Submitting leave request:', leaveData); // Log the leave data // Us
     }, [user]); 
   // Fetch user information on component mount
   // Load leaves on component mount
-
+console.log('leaves er vitor',leaves)
   return (
     <div className="leave-container"> {/* Add class for styling */}
       <h2>Leave Request</h2>
@@ -142,12 +142,14 @@ console.log('Submitting leave request:', leaveData); // Log the leave data // Us
         <p>Please log in to submit a leave request.</p>
       )}
       <h3>Existing Leave Requests</h3>
+      <h4>Please submit your leave request in a timely manner to ensure that the allocated slot is not vacant for an entire day.</h4> 
       <ul>
         {leaves.map((leave) => (
           leave.status ? ( // Check if status is defined
             <li key={leave.id} className={`leave-item ${leave.status.toLowerCase()}`}>
+              <span>Name:{leave.nurseId.firstName} {leave.nurseId.lastName}</span>
               <span>{leave.reason}</span>
-              <span>{leave.startDate} - {leave.endDate}</span>
+              <span>{new Date(leave.startDate).toLocaleDateString()} to {new Date(leave.endDate).toLocaleDateString()}</span>
               <span className={`status ${leave.status.toLowerCase()}`}>
                 {leave.status}
               </span>
