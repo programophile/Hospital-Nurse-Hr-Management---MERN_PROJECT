@@ -39,7 +39,7 @@
     background-color: #d4edda; /* Green for Approved */
   }
   
-  .leave-item.denied {
+  .leave-item.rejected {
     background-color: #f8d7da; /* Red for Denied */
   }
   
