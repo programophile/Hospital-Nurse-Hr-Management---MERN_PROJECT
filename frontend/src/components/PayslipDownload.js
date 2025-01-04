@@ -27,13 +27,13 @@ const PayslipDownload = () => {
 
         try {
             const storedUser = JSON.parse(localStorage.getItem('user'));
-            if (!storedUser || !storedUser._id) {
+            if (!storedUser || !storedUser.id) {
                 navigate('/login');
                 return;
             }
             console.log("working")
 
-            const response = await downloadPayslip(storedUser._id, month, year);
+            const response = await downloadPayslip(storedUser.id, month, year);
 
             // Create a blob URL for the PDF
             const url = window.URL.createObjectURL(new Blob([response.data]));

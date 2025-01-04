@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { fetchPayrolls, createPayroll, updatePayroll, deletePayroll, fetchNurses } from '../api';
+import { fetchPayrolls, createPayroll, updatePayroll, deletePayroll, fetchNurses, fetchNurseById } from '../api';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import Navbar from './Navbar';  // Import the Navbar component
 import './Payroll.css';
