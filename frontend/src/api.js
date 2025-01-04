@@ -1,7 +1,5 @@
-// frontend/src/api.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
 export const fetchNurses = async () => {
     try {
       const response = await axios.get(`${API_URL}/nurses`);
@@ -11,6 +9,17 @@ export const fetchNurses = async () => {
       throw error;
     }
   };
+
+const API_URL = 'http://localhost:5000/api';
+// export const fetchNurses = async () => {
+//     try {
+//       const response = await axios.get(`${API_URL}/nurses`);
+//       return response.data;
+//     } catch (error) {
+//       console.error('Error fetching nurses:', error);
+//       throw error;
+//     }
+//   };
 
 export const fetchDepartments = async () => {
     try {
@@ -77,9 +86,98 @@ export const updateShift = async (shiftId, shiftData) => {
     throw error;
   }
 };
+
+//export const fetchNurses = () => axios.get(`${API_URL}/nurses`);
+export const createNurse = (nurse) => axios.post(`${API_URL}/nurses`, nurse);
+
+//export const fetchShifts = () => axios.get(`${API_URL}/shifts`);
+
+// export const fetchShifts = () => axios.get(`${API_URL}/shifts`);
+
+
 export const createShift = (shift) => axios.post(`${API_URL}/shifts`, shift);
 export const fetchLeaves = () => axios.get(`${API_URL}/leaves`);
-export const createLeave = (leave) => axios.post(`${API_URL}/leaves`, leave);
+//export const createLeave = (leave) => axios.post(`${API_URL}/leaves`, leave);
 export const fetchPayrolls = () => axios.get(`${API_URL}/payrolls`);
 export const createPayroll = (payroll) => axios.post(`${API_URL}/payrolls`, payroll);
+
 export const deleteShift = (shiftId) => axios.delete(`${API_URL}/shifts/${shiftId}`);
+
+export const fetchNurseByUserId = (userId) => {
+    return axios.get(`${API_URL}/nurses/user/${userId}`);  };
+export const createLeave = (leave) => {
+    return axios.post(`${API_URL}/leaves`, leave); // Ensure this matches your backend route
+};
+
+
+export const fetchUserPayrolls = (userId) => 
+    axios.get(`${API_URL}/payrolls/user/${userId}`); // Fetch payrolls for a specific user
+
+// Payslip download function
+export const downloadPayslip = (userId, month, year) =>
+    axios.get(`${API_URL}/payrolls/payslip/${userId}`, {
+        params: { month, year },
+        responseType: 'blob'
+    });
+
+// New functions for updating and deleting payrolls
+export const updatePayroll = (payrollId, payroll) => 
+    axios.put(`${API_URL}/payrolls/${payrollId}`, payroll);
+
+export const deletePayroll = (payrollId) => 
+    axios.delete(`${API_URL}/payrolls/${payrollId}`);
+
+// Add these functions to your existing api/index.js file
+
+export const markAttendance = (data) => {
+    try {
+        const response = axios.post(`${API_URL}/attendance`, data);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// api.js
+export const fetchAttendanceHistory = async (nurseId) => {
+    try {
+        const response = await axios.get(`${API_URL}/attendance/${nurseId}`);
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            throw new Error(`Failed to load attendance history. Status code: ${response.status}`);
+        }
+    } catch (error) {
+        if (error.response) {
+            throw new Error(`Failed to load attendance history. Error: ${error.response.data.message}`);
+        } else {
+            throw new Error(`Failed to load attendance history. Error: ${error.message}`);
+        }
+    }
+};
+
+export const fetchAllAttendance = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/attendance`);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+// Add these functions to your existing api/index.js file
+
+
+export const updateLeaveStatus = async (leaveId, newStatus) => {
+  try {
+    const response = await axios.put(`${API_URL}/leaves/${leaveId}`, { status: newStatus });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating leave status:', error);
+    throw error;
+  }
+};
+
+export const approvePayroll = (payrollId) => {
+  return axios.put(`${API_URL}/payroll/approve/${payrollId}`, { status: 'Approved' });
+};
+

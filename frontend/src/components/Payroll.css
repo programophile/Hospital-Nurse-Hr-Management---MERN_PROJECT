@@ -1,0 +1,218 @@
+.payroll-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.payroll-container h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.payroll-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.payroll-table th,
+.payroll-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.payroll-table th {
+    background-color: #3498db;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+.payroll-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.payroll-table tr:hover {
+    background-color: #f1f3f5;
+}
+
+.error-message {
+    color: #dc3545;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: #f8d7da;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.loading {
+    text-align: center;
+    color: #3498db;
+    margin: 2rem 0;
+    font-size: 1.2rem;
+}
+
+.form-container {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.75rem;
+    color: #495057;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 1.5rem;
+    border: 2px solid #e0e3e7;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15),
+                inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+}
+
+.form-group input::placeholder {
+    color: #6c757d;
+    opacity: 0.8;
+    font-size: 1.1rem;
+}
+
+button {
+    padding: 0.75rem 1.5rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+button:disabled {
+    background-color: #adb5bd;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .payroll-container {
+        padding: 1.5rem;
+    }
+    
+    .payroll-table th,
+    .payroll-table td {
+        padding: 0.75rem;
+    }
+    
+    .form-container {
+        padding: 1.5rem;
+    }
+}
+
+.payroll-info-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.payroll-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.payroll-info-item:last-child {
+    border-bottom: none;
+}
+
+.payroll-info-label {
+    font-size: 1.1rem;
+    color: #495057;
+    font-weight: 500;
+}
+
+.payroll-info-value {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.payroll-info-value.salary {
+    color: #27ae60;
+}
+
+.payroll-info-value.overtime {
+    color: #f39c12;
+}
+
+.payroll-info-value.deductions {
+    color: #e74c3c;
+}
+
+.payroll-info-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.payroll-info-header h3 {
+    color: #3498db;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.payroll-info-header p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
