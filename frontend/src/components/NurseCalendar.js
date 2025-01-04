@@ -22,6 +22,7 @@ const NurseCalendar = () => {
     console.log('Attendance record found:', attendanceRecord);
     if (attendanceRecord) {
       console.log('stat', attendanceRecord.status);
+
       return attendanceRecord.status === 'Present' ? 'Shift Covered' : 'Shift Not Covered';
 
     } else {
@@ -29,6 +30,19 @@ const NurseCalendar = () => {
       return 'Shift Should be Covered';
     }
 
+  };
+
+  
+
+  const updateShiftStatus = async (shiftId, status) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/shifts/${shiftId}`, {
+        status,
+      });
+      console.log('Shift status updated:', response.data);
+    } catch (error) {
+      console.error('Error updating shift status:', error);
+    }
   };
   const loadShifts = async () => {
     try {
@@ -51,6 +65,8 @@ const NurseCalendar = () => {
             getAttendanceStatus(attendanceHistory, shift.date);
           let title;
           if (attendanceStatus === 'Shift Covered') {
+            console.log("hihi",shift._id)
+            updateShiftStatus(shift._id,'Covered');
             title = 'Shift Covered';
           } else if (attendanceStatus === 'Shift Should be Covered') {
             const startTime = moment(shift.startTime, 'HH:mm');

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchNurses, fetchShifts, createShift, deleteShift, fetchDepartments, updateShift } from '../api';
+import './AdminDashboard.css';
 import Modal from 'react-modal';
 const AdminDashboard = () => {
   const [nurses, setNurses] = useState([]);
@@ -18,7 +19,7 @@ const AdminDashboard = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const loadNurses = async () => {
     const response = await fetchNurses();
-    console.log('load Nurse',response)
+    console.log('load Nurse', response)
     setNurses(response);
   };
   const handleUpdateShift = (shift) => {
@@ -59,22 +60,22 @@ const AdminDashboard = () => {
       tomorrow.setDate(tomorrow.getDate() + 1);
       const tomorrowStart = new Date(tomorrow.setHours(0, 0, 0));
       const tomorrowEnd = new Date(tomorrow.setHours(23, 59, 59));
-  
+
       const response = await fetchShifts();
       const shifts = response;
-  
+
       const tomorrowShifts = shifts.filter((shift) => {
         const shiftDate = new Date(shift.date);
         const shiftStart = new Date(shiftDate.setHours(shift.startTime.split(":")[0], shift.startTime.split(":")[1]));
         const shiftEnd = new Date(shiftDate.setHours(shift.endTime.split(":")[0], shift.endTime.split(":")[1]));
         return shiftStart >= tomorrowStart && shiftEnd <= tomorrowEnd;
       });
-  
+
       const tomorrowHours = [];
       for (let i = 0; i < 24; i++) {
         tomorrowHours.push(new Date(tomorrow.setHours(i, 0, 0)));
       }
-  
+
       const coveredHours = [];
       tomorrowShifts.forEach((shift) => {
         const shiftDate = new Date(shift.date);
@@ -86,9 +87,9 @@ const AdminDashboard = () => {
           }
         }
       });
-  
+
       const uncoveredHours = tomorrowHours.filter((hour) => !coveredHours.includes(hour));
-  
+
       if (uncoveredHours.length > 0) {
         setNotification({
           type: "error",
@@ -112,7 +113,7 @@ const AdminDashboard = () => {
     try {
       const response = await fetchShifts();
       const allShifts = response;
-      console.log("all shifts",response)
+      console.log("all shifts", response)
       const filteredShifts = allShifts.filter((shift) => {
         if (searchQuery) {
           return (
@@ -175,7 +176,7 @@ const AdminDashboard = () => {
 
   const handleDepartmentChange = (e) => {
     setSelectedDepartment(e.target.value);
-    console.log("handledepartmentchange",nurses)
+    console.log("handledepartmentchange", nurses)
     const filteredNurses = nurses.filter((nurse) => nurse.department === e.target.value);
     setFilteredNurses(filteredNurses);
   };
@@ -225,7 +226,8 @@ const AdminDashboard = () => {
     setFilteredNurses(filteredNurses);
   };
 
-  useEffect(() => {loadNurses();
+  useEffect(() => {
+    loadNurses();
     loadShifts();
     loadDepartments();
   }, []);
@@ -237,137 +239,136 @@ const AdminDashboard = () => {
   //   checkTomorrowSchedule();
   // }, []);
   return (
-    <div>
-      <h2>Admin Dashboard</h2>
-      <button onClick={checkTomorrowSchedule}>Check Tomorrow's Schedule</button>
+    <div className="admin-dashboard">
+      <h2 className="admin-dashboard-title">Admin Dashboard</h2>
+      <button className="check-tomorrow-schedule-btn" onClick={checkTomorrowSchedule}>Check Tomorrow's Schedule</button>
       {notification && (
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          backgroundColor: "red",
-          color: "white",
-          padding: "10px",
-          textAlign: "center",
-        }}
-      >
-        {notification.message}
-        <ul>
-          {notification.hours.map((hour, index) => (
-            <li key={index}>{hour.toLocaleTimeString()}</li>
-          ))}
-        </ul>
-        <button onClick={handleCloseNotification}>Close</button>
-      </div>
-    )}
-   
-      <form onSubmit={handleSubmit}>
-        <select value={selectedDepartment} onChange={handleDepartmentChange} required>
-          <option value="">Select Department</option>
-          {departments.map((department, index) => (
-            <option key={index} value={department}>
-              {department}
-            </option>
-          ))}
-        </select>
-        <input type="date" value={selectedDate} onChange={handleDateChange} required />
-        <input type="time" value={selectedStartTime} onChange={handleStartTimeChange} required />
-        <input type="time" value={selectedEndTime} onChange={handleEndTimeChange} required />
-        <select value={nurseId} onChange={(e) => setNurseId(e.target.value)} required>
-          <option value="">Select Nurse</option>
-          {filteredNurses.map((nurse) => (
-            <option key={nurse._id} value={nurse._id}>
-              {nurse.firstName} {nurse.lastName}
-            </option>
-          ))}
-        </select>
-        <button type="submit">Assign Shift</button>
-      </form>
+        <div className="notification">
+          <br></br>
+          <p>{notification.message}</p>
+          <ul>
+            {notification.hours.map((hour, index) => (
+              <li key={index}>{hour.toLocaleTimeString()}</li>
+            ))}
+          </ul>
+          <button className="close-notification-btn" onClick={handleCloseNotification}>Close</button>
+        </div>
+      )}
 
-      <h3>All Nurses' Shifts</h3>
+      <div className="assign-shifts-section">
+        <h3 className="assign-shifts-title">Assign Shifts</h3>
+        <form onSubmit={handleSubmit} className="assign-shifts-form">
+          <select value={selectedDepartment} onChange={handleDepartmentChange} required className="department-select">
+            <option value="">Select Department</option>
+            {departments.map((department, index) => (
+              <option key={index} value={department}>
+                {department}
+              </option>
+            ))}
+          </select>
+          <input type="date" value={selectedDate} onChange={handleDateChange} required className="date-input" />
+          <input type="time" value={selectedStartTime} onChange={handleStartTimeChange} required className="start-time-input" />
+          <input type="time" value={selectedEndTime} onChange={handleEndTimeChange} required className="end-time-input" />
+          <select value={nurseId} onChange={(e) => setNurseId(e.target.value)} required className="nurse-select">
+            <option value="">Select Nurse</option>
+            {filteredNurses.map((nurse) => (
+              <option key={nurse._id} value={nurse._id}>
+                {nurse.firstName} {nurse.lastName}
+              </option>
+            ))}
+          </select>
+          <button type="submit" className="assign-shift-btn">Assign Shift</button>
+        </form>
+      </div>
+
+      <h3 className="all-shifts-title">All Nurses' Shifts</h3>
 
       <input
         type="text"
         value={searchQuery}
         onChange={handleSearch}
         placeholder="Search for shifts by employee ID or department"
+        className="search-input"
       />
       {shifts.length === 0 ? (
-        <p>No nurses scheduled</p>
+        <p className="no-shifts-message">No nurses scheduled</p>
       ) : (
-        <table>
+        <table className="shifts-table">
           <thead>
             <tr>
-              <th>Nurse Name</th>
-              <th>Employee ID</th>
-              <th>Date</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th className="nurse-name-th">Nurse Name</th>
+              <th className="employee-id-th">Employee ID</th>
+              <th className="date-th">Date</th>
+              <th className="start-time-th">Start Time</th>
+              <th className="end-time-th">End Time</th>
+              <th className="status-th">Status</th>
+              <th className="action-th">Action</th>
             </tr>
           </thead>
           <tbody>
             {shifts.map((shift) => (
               <tr key={shift._id}>
-                <td>
+                <td className="nurse-name-td">
                   {shift.nurseId
                     ? `${shift.nurseId.firstName} ${shift.nurseId.lastName}`
                     : 'Nurse not found'}
                 </td>
-                <td>{`${shift.nurseId.employeeId}`}</td>
-                <td>{new Date(shift.date).toLocaleDateString()}</td>
-                <td>{shift.startTime}</td>
-                <td>{shift.endTime}</td>
-                <td>{shift.status}</td>
-                <td>
-                  <button onClick={() => handleDeleteShift(shift._id)}>Delete</button>
-                  <button onClick={() => handleUpdateShift(shift)}>Update</button>
+                <td className="employee-id-td">{`${shift.nurseId.employeeId}`}</td>
+                <td className="date-td">{new Date(shift.date).toLocaleDateString()}</td>
+                <td className="start-time-td">{shift.startTime}</td>
+                <td className="end-time-td">{shift.endTime}</td>
+                <td className="status-td">{shift.status}</td>
+                <td className="action-td">
+                  <button className="delete-shift-btn" onClick={() => handleDeleteShift(shift._id)}>Delete</button>
+                  <button className="update-shift-btn" onClick={() => handleUpdateShift(shift)}>Update</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-      
+
+
       {modalIsOpen && (
-  <Modal
-    isOpen={modalIsOpen}
-    onRequestClose={() => setIsOpen(false)}
-    contentLabel="Update Shift"
-  >
-    {selectedShift && (
-      <div>
-        <button onClick={handleAfterCloseModal}>Close</button>
-        <form onSubmit={handleUpdateShiftSubmit}>
-          <h2>Update Shift</h2>
-          <p>
-            {selectedShift.nurseId.firstName} {selectedShift.nurseId.lastName}
-          </p>
-          <input
-            type="date"
-            value={selectedShift.date}
-            onChange={(e) => setSelectedShift({ ...selectedShift, date: e.target.value })}
-          />
-          <input
-            type="time"
-            value={selectedShift.startTime}
-            onChange={(e) => setSelectedShift({ ...selectedShift, startTime: e.target.value })}
-          />
-          <input
-            type="time"
-            value={selectedShift.endTime}
-            onChange={(e) => setSelectedShift({ ...selectedShift, endTime: e.target.value })}
-          />
-          <button type="submit">Update Shift</button>
-        </form>
-      </div>
-    )}
-  </Modal>
-)}
-        
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={() => setIsOpen(false)}
+          contentLabel="Update Shift"
+          className="update-shift-modal"
+        >
+          {selectedShift && (
+            <div className="update-shift-modal-content">
+              <button className="close-modal-btn" onClick={handleAfterCloseModal}>Close</button>
+              <form onSubmit={handleUpdateShiftSubmit} className="update-shift-form">
+                <h2 className="update-shift-title">Update Shift</h2>
+                <p className="nurse-name-display">
+                  {selectedShift.nurseId.firstName} {selectedShift.nurseId.lastName}
+                </p>
+                <input
+                  type="date"
+                  value={selectedShift.date}
+                  onChange={(e) => setSelectedShift({ ...selectedShift, date: e.target.value })}
+                  className="update-date-input"
+                />
+                <input
+                  type="time"
+                  value={selectedShift.startTime}
+                  onChange={(e) => setSelectedShift({ ...selectedShift, startTime: e.target.value })}
+                  className="update-start-time-input"
+                />
+                <input
+                  type="time"
+                  value={selectedShift.endTime}
+                  onChange={(e) => setSelectedShift({ ...selectedShift, endTime: e.target.value })}
+                  className="update-end-time-input"
+                />
+                <button type="submit" className="update-shift-submit-btn">Update Shift</button>
+              </form>
+            </div>
+          )}
+        </Modal>
+      )}
+
 
     </div>
   );

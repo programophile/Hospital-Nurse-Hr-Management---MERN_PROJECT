@@ -1,0 +1,169 @@
+.admin-dashboard {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .admin-dashboard-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .check-tomorrow-schedule-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .notification {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #0f475e;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+  .notification ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .notification li {
+    margin-bottom: 5px;
+  }
+
+  .notification li:last-child {
+    margin-bottom: 0;
+  }
+  
+  .close-notification-btn {
+    background-color: #fff;
+    color: #f0ad4e;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  .assign-shifts-section {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  .assign-shifts-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .assign-shifts-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .department-select,
+  .date-input,
+  .start-time-input,
+  .end-time-input,
+  .nurse-select,
+  .assign-shift-btn {
+    margin-bottom: 10px;
+  }
+  
+  .assign-shift-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .all-shifts-title {
+    font-size: 20px;
+    margin-top: 30px;
+  }
+  
+  .search-input {
+    margin-bottom: 15px;
+    padding: 10px;
+    width: 100%;
+  }
+  
+  .no-shifts-message {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .shifts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .shifts-table th,
+  .shifts-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .shifts-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .action-td {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .delete-shift-btn,
+  .update-shift-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .update-shift-modal {
+    &.ReactModal__Overlay {
+      background-color: rgba(0, 0, 0, 0.75);
+    }
+  }
+  .update-shift-modal-content {
+    padding: 20px;
+  }
+  
+  .close-modal-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .update-shift-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .update-shift-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .update-date-input,
+  .update-start-time-input,
+  .update-end-time-input {
+    margin-bottom: 10px;
+  }
