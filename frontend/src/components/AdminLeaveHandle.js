@@ -7,7 +7,7 @@ const AdminLeaveHandle = () => {
   const [leaves, setLeaves] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
+  const [searchQuery, setSearchQuery] = useState('');
   // Check if user is admin
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -31,7 +31,15 @@ const AdminLeaveHandle = () => {
   useEffect(() => {
     loadLeaves();
   }, []);
+  const filteredLeaves = leaves.filter((leave) => {
+    const nurseName = `${leave.nurseId.firstName} ${leave.nurseId.lastName}`;
+    const reason = leave.reason;
+    return (
+      nurseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      reason.toLowerCase().includes(searchQuery.toLowerCase())
 
+    );
+  });
   // Handle status update
   const handleStatusUpdate = async (leaveId, newStatus) => {
     try {
@@ -51,8 +59,17 @@ return (
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       {successMessage && <p className="success-message">{successMessage}</p>}
       <h2>Leave Requests</h2>
+      <div className='search-container'>
+      <input
+        type="text"
+        placeholder="Search by name or reason"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="search-input"
+      />
+      </div>
       <ul className="admin-leave-handle-list">
-        {leaves.map((leave) => (
+        {filteredLeaves.map((leave) => (
           <li key={leave._id} className={`admin-leave-handle-item ${leave.status.toLowerCase()}`}>
             <div>
               <h3 className="admin-leave-handle-name">
