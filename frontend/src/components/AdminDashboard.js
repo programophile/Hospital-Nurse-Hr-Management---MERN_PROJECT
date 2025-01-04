@@ -27,6 +27,7 @@ const AdminDashboard = () => {
   };
 
   const handleAfterOpenModal = () => {
+    setIsOpen(false);
     // after modal is opened, you can add some logic here if needed
   }
   const handleAfterCloseModal = () => {
@@ -199,6 +200,7 @@ const AdminDashboard = () => {
   const handleCloseNotification = () => {
     setNotification(null);
   };
+
   const handleEndTimeChange = (e) => {
     setSelectedEndTime(e.target.value);
     const filteredNurses = nurses.filter((nurse) => {
@@ -299,6 +301,7 @@ const AdminDashboard = () => {
           <thead>
             <tr>
               <th>Nurse Name</th>
+              <th>Employee ID</th>
               <th>Date</th>
               <th>Start Time</th>
               <th>End Time</th>
@@ -314,6 +317,7 @@ const AdminDashboard = () => {
                     ? `${shift.nurseId.firstName} ${shift.nurseId.lastName}`
                     : 'Nurse not found'}
                 </td>
+                <td>{`${shift.nurseId.employeeId}`}</td>
                 <td>{new Date(shift.date).toLocaleDateString()}</td>
                 <td>{shift.startTime}</td>
                 <td>{shift.endTime}</td>
@@ -328,13 +332,20 @@ const AdminDashboard = () => {
         </table>
       )}
       
-      {selectedShift && (
+      {modalIsOpen && (
+  <Modal
+    isOpen={modalIsOpen}
+    onRequestClose={() => setIsOpen(false)}
+    contentLabel="Update Shift"
+  >
+    {selectedShift && (
+      <div>
+        <button onClick={handleAfterCloseModal}>Close</button>
         <form onSubmit={handleUpdateShiftSubmit}>
           <h2>Update Shift</h2>
-    
           <p>
             {selectedShift.nurseId.firstName} {selectedShift.nurseId.lastName}
-          
+          </p>
           <input
             type="date"
             value={selectedShift.date}
@@ -351,10 +362,13 @@ const AdminDashboard = () => {
             onChange={(e) => setSelectedShift({ ...selectedShift, endTime: e.target.value })}
           />
           <button type="submit">Update Shift</button>
-          </p>
         </form>
-        
+      </div>
+    )}
+  </Modal>
 )}
+        
+
     </div>
   );
 };
