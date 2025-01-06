@@ -25,20 +25,28 @@ const nurseSchema = new mongoose.Schema({
   contactNumber: { type: String },
   role: { type: String, default: 'nurse' },
   profilePicture: { type: String, default: '' }, // URL to the profile picture
-  specialty: { type: String, default: '' }, // Nurse's specialty
+  specialty: { type: String, default: '' },
+  bloodGroup: { type: String,  default: '' },
+  birthday: { type: Date, default: '' },
+  maritalStatus: { type: String, default: '' }, 
   educationInstitution: { type: String, default: '' } // Education institution name
 }, { timestamps: true });
 
 
 // Method to generate the next employee ID
-nurseSchema.statics.generateEmployeeId = async function() {
-  const lastNurse = await this.findOne().sort({ employeeId: -1 });
-  if (!lastNurse) {
-    return 'N0001'; // If no nurse exists, start with N0001
+nurseSchema.statics.generateEmployeeId = async () => {
+  let employeeId;
+  let isUnique = false;
+
+  while (!isUnique) {
+    employeeId = `N${Math.floor(Math.random() * 1000)}`;
+    const existingNurse = await Nurse.findOne({ employeeId });
+    if (!existingNurse) {
+      isUnique = true;
+    }
   }
-  const lastId = parseInt(lastNurse.employeeId, 10);
-  const nextId = (lastId + 1).toString().padStart(4, '0'); // Increment and pad with leading zeros
-  return `N${nextId}`;
+
+  return employeeId;
 };
 
 // Password hashing middleware

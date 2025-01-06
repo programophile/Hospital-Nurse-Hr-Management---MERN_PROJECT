@@ -53,11 +53,11 @@ const generatePayslipPDF = (payroll) => {
             doc.text(`Bank Account: 03838483839}`);
             doc.text(`Bank Branch: Gulshan, Dhaka`);
             doc.moveDown();
-
+          
             // Add signature
             doc.fontSize(12)
                .text('Signature:', { underline: true });
-            doc.image('/home/sad/Documents/GitHub/Hospital-Nurse-Management/backend/utils/signature.png', { width: 100 });
+            doc.image('C:/Users/Surzo/Desktop/Hospital Nurse Management/backend/utils/signature.png', { width: 100 });
             doc.moveDown(10);
 
             // Add download date and time

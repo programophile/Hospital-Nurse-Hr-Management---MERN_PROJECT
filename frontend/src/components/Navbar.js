@@ -30,16 +30,24 @@ const Navbar = () => {
     <nav>
       <div className="navbar">
         <Link to={user && user.role === 'admin' ? "/admin-dashboard" : "/nurse-dashboard"}>Home</Link>
-        {user && user.role !== 'nurse' && <Link to="/payrolls">Payroll</Link>}
-        {user && user.role === 'admin' && <Link to="/admin-payroll">Admin Payroll</Link>}
-        <Link to="/payroll-history">Payroll History</Link>
-        <Link to="/payslip-download">Download Payslip</Link>
-        <Link to="/leave-request">Leave Request</Link>
-        <Link to="/attendance">Attendance</Link>
+        {user && user.role === 'admin' && <Link to="/payrolls">Payroll</Link>}
+        {user && user.role === 'admin' && <Link to="/admin-payroll">Confirm Payroll</Link>}
+
+        {user && user.role === 'nurse' && <Link to="/payroll-history">Payroll History</Link>}
+    
+        
+        {user && user.role === 'nurse' && <Link to="/attendance">Attendance</Link>}
+        {user && user.role === 'nurse' && <Link to="/payslip-download">Download Payslip</Link>}
+        {/* <Link to="/payroll-history">Payroll History</Link> */}
+        {/* <Link to="/payslip-download">Download Payslip</Link> */}
+        {user && user.role === 'nurse' && <Link to="/leave-request">Leave Request</Link>} 
+        {user && user.role === 'admin' && <Link to="/admin-leave-handle">Handle Leave Request</Link>}
+        
+        
 
         {user ? (
           <>
-            <span>Welcome, {user.firstName} {user.lastName}</span>
+            <span><h1>Welcome, {user.firstName} {user.lastName}</h1></span>
             <button onClick={handleLogout}>Logout</button>
           </>
         ) : (

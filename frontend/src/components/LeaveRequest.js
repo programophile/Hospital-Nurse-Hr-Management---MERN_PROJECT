@@ -1,62 +1,52 @@
+
 import React, { useState, useEffect } from 'react';
-import { fetchLeaves, createLeave,fetchNurses } from '../api'; // Ensure these functions are correctly imported
-import Navbar from './Navbar'; 
-import { useNavigate } from 'react-router-dom';
+import { fetchLeaves, createLeave } from '../api'; // Ensure these functions are correctly imported
 import '../leave.css'; 
-
-    // Check if user is logged in
-
-
 const LeaveRequest = () => {
-  const navigate = useNavigate(); // Use navigate function from react-router-dom
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-    if (!storedUser) {
-        navigate('/login'); // Redirect to login if user is not logged in
-    }
-  }, []);
   const [user, setUser ] = useState(null); // Store user object
   const [nurseId, setNurseId] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  //const [firstName, setFirstName] = useState('');
+  //const [lastName, setLastName] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [reason, setReason] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [leaves, setLeaves] = useState([]);
-  const [nurses, setNurses] = useState([]); 
+  //const [nurses, setNurses] = useState([]); 
   //const [status,setStatus]=useState(['Pending']);   // State to hold list of nurses
-  const [status, setStatus] = useState('Pending');
-
-  
+  //const [status, setStatus] = useState('Pending');
+  const [searchQuery, setSearchQuery] = useState('');
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
       if (storedUser) {
       setUser(storedUser);
       setNurseId(storedUser.id);
-      setFirstName(storedUser.firstName)
-      setLastName(storedUser.lastName)
+      //setFirstName(storedUser.firstName)
+      //setLastName(storedUser.lastName)
+      setSearchQuery(`${storedUser.firstName} ${storedUser.lastName}`);
       console.log('gogogo',storedUser) // Set the Nurse ID from the user info
+      console.log('gogogo',storedUser.id) // Set the Nurse ID from the user info
   }
-  if (storedUser && storedUser.role === 'admin') {
-                fetchNurses().then((response) => {
-                    setNurses(response.data);
-                }).catch((error) => {
-                    console.error('Error fetching nurses:', error);
-                });
-            }
-        }, []);
+}, []);
 
-
+        const filteredLeaves = leaves.filter((leave) => {
+          const nurseName = `${leave.nurseId.firstName} ${leave.nurseId.lastName}`;
+          return (
+            nurseName.toLowerCase().includes(searchQuery.toLowerCase())
+      
+          );
+        });
 
   // Load existing leaves
   const loadLeaves = async () => {
     try {
-      const response = await fetchLeaves();
-      setLeaves(response.data);
+      const data = await fetchLeaves();
+      console.log('Fetched leaves data:', data); // Add this log
+      setLeaves(data); // Remove .data as fetchLeaves already returns the data
     } catch (error) {
-      console.error('Error fetching leaves:', error);
+      console.error('Load leaves error details:', error);
+      setErrorMessage('Failed to load leave requests');
     }
   };
 //changed
@@ -86,7 +76,7 @@ console.log('Submitting leave request:', leaveData); // Log the leave data // Us
       setEndDate('');
       setStartDate('');
       setReason('');
-      setStatus('Pending');
+      //setStatus('Pending');
       //setStatus('Pending'); // Reload leaves after successful submission
     } catch (error) {
       console.error('Error creating leave request:', error);
@@ -95,24 +85,25 @@ console.log('Submitting leave request:', leaveData); // Log the leave data // Us
   };
     useEffect(() => {
         loadLeaves();
-    }, [user]); 
+    }, [nurseId]); 
   // Fetch user information on component mount
   // Load leaves on component mount
 console.log('leaves er vitor',leaves)
   return (
     <div className="leave-container"> {/* Add class for styling */}
-      <h2>Leave Request</h2>
+      <h2>Leave Request Form</h2>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       {successMessage && <p>{successMessage}</p>}
       {user ? (
         <form onSubmit={handleSubmit} className="leave-form"> {/* Add class for styling */}
-          <input
+          {/* <input
             type="text"
             placeholder="User "
             value={user ? `${user.firstName} ${user.lastName}` : 'Loading...'}
             disabled
             className="input-field"
-          />
+          /> */}
+          
           <input
             type="date"
             value={startDate}
@@ -143,10 +134,18 @@ console.log('leaves er vitor',leaves)
       )}
       <h3>Existing Leave Requests</h3>
       <h4>Please submit your leave request in a timely manner to ensure that the allocated slot is not vacant for an entire day.</h4> 
+      <input
+        type="text"
+        placeholder="Search by name or reason"
+        value={searchQuery}
+        disabled
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="search-input"
+      />
       <ul>
-        {leaves.map((leave) => (
+        {filteredLeaves.map((leave) => (
           leave.status ? ( // Check if status is defined
-            <li key={leave.id} className={`leave-item ${leave.status.toLowerCase()}`}>
+            <li key={leave._id} className={`leave-item ${leave.status.toLowerCase()}`}>
               <span>Name:{leave.nurseId.firstName} {leave.nurseId.lastName}</span>
               <span>{leave.reason}</span>
               <span>{new Date(leave.startDate).toLocaleDateString()} to {new Date(leave.endDate).toLocaleDateString()}</span>
@@ -162,3 +161,4 @@ console.log('leaves er vitor',leaves)
 };
 
 export default LeaveRequest;
+

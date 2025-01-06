@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
 // Update Nurse Profile
 router.put('/:id', upload.single('profilePicture'), async (req, res) => {
   const { id } = req.params;
-  const { specialty, educationInstitution } = req.body;
+  const { specialty, educationInstitution, bloodGroup, birthday, maritalStatus } = req.body;
   const profilePicture = req.file ? req.file.path.replace(/\\/g, '/') : null;
 
   try {
@@ -60,6 +60,9 @@ router.put('/:id', upload.single('profilePicture'), async (req, res) => {
     // Update the nurse's profile
     nurse.specialty = specialty;
     nurse.educationInstitution = educationInstitution;
+    nurse.bloodGroup = bloodGroup; // Add new field
+    nurse.birthday = new Date(birthday); // Add new field
+    nurse.maritalStatus = maritalStatus; // Add new field
     if (profilePicture) {
       nurse.profilePicture = profilePicture;
     }

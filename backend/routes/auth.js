@@ -16,9 +16,13 @@ router.post('/register', async (req, res) => {
       password,  
       department,
       contactNumber,
-      role // Include role in the registration data
+      role, // Include role in the registration data
+      bloodGroup,
+      birthday,
+      maritalStatus,
+      educationInstitution,
+      specialty
     } = req.body;
-
     // Validation
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
@@ -36,7 +40,12 @@ router.post('/register', async (req, res) => {
         employeeId,
         department,
         contactNumber,
-        role
+        role,
+        bloodGroup,
+        birthday,
+        maritalStatus,
+        educationInstitution,
+        specialty
       });
     } else {
       // Generate the next employee ID for nurse
@@ -49,7 +58,12 @@ router.post('/register', async (req, res) => {
         employeeId,
         department,
         contactNumber,
-        role
+        role,
+        bloodGroup,
+        birthday,
+        maritalStatus,
+        educationInstitution,
+        specialty
       });
     }
 

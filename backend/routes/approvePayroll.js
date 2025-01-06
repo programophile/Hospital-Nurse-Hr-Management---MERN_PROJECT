@@ -7,7 +7,7 @@ router.put('/:id', async (req, res) => {
     const { id } = req.params;
     try {
         console.log('Approving payroll entry:', id);
-        const updatedPayroll = await Payroll.findByIdAndUpdate(id, { status: 'Approved' }, { new: true });
+        const updatedPayroll = await Payroll.findByIdAndUpdate(id, { status: 'Payment Completed' }, { new: true });
         if (!updatedPayroll) {
             return res.status(404).json({ message: 'Payroll entry not found' });
         }

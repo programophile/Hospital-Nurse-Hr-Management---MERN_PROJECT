@@ -40,8 +40,8 @@ router.post ('/', async (req, res) => {
    // const leave = new Leave(req.body);
     const leave = new Leave({
         nurseId,
-        firstName,
-        lastName,
+        //firstName,
+        //lastName,
         startDate,
         endDate,
         reason,
@@ -55,30 +55,36 @@ router.post ('/', async (req, res) => {
 });
 // Get All Leave Requests
 router.get('/', async (req, res) => {
-    try {
-    console.log('Leaves array hiih', leaves);
-      const leaves = await Leave.find().populate({
+  try {
+    console.log('Fetching leaves...'); // Add this log
+    const leaves = await Leave.find()
+      .populate({
         path: 'nurseId',
-        model: Nurse,
-        select: 'firstName'
-      });
-      console.log('Leaves array', leaves);
-       // Populate nurseId with firstName and lastName
-      res.status(200).json(leaves);
-    } catch (error) {
-      res.status(500).json({ message: 'Error fetching leave requests', error: error.message });
-    }
-  });
+        select: 'firstName lastName' // Only select the fields you need
+      })
+      .exec();
+    
+    console.log('Found leaves:', leaves); // Add this log
+    res.status(200).json(leaves);
+  } catch (error) {
+    console.error('Error in /leaves route:', error); // Add this log
+    res.status(500).json({ 
+      message: 'Error fetching leave requests', 
+      error: error.message,
+      stack: error.stack // This will help debug the error
+    });
+  }
+});
 // Get Nurse's Leave Requests
-router.get('/nurse/:nurseId', async (req, res) => {
-    try {
-      const nurseId = req.params.nurseId;
-      const leaves = await Leave.find({ nurseId });
-      res.status(200).json(leaves);
-    } catch (error) {
-      res.status(500).json({ message: 'Error fetching nurse leaves', error: error.message });
-    }
-  });
+// router.get('/nurse/:nurseId', async (req, res) => {
+//     try {
+//       const nurseId = req.params.nurseId;
+//       const leaves = await Leave.find({ nurseId });
+//       res.status(200).json(leaves);
+//     } catch (error) {
+//       res.status(500).json({ message: 'Error fetching nurse leaves', error: error.message });
+//     }
+//   });
 // Add more routes for updating, deleting, etc.
 // Example for updating a leave request
 // router.put('/:id', async (req, res) => {
