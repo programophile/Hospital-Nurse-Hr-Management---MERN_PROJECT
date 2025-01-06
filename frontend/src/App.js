@@ -1,6 +1,3 @@
-
-
-// export default App;
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
@@ -15,13 +12,12 @@ import PayslipDownload from './components/PayslipDownload';
 import PayrollHistory from './components/PayrollHistory';
 import Navbar from './components/Navbar';
 import LeaveRequest from './components/LeaveRequest'; 
+import AdminLeaveHandle from './components/AdminLeaveHandle';
 import Attendance from './components/Attendance'; // Add this line
-import AdminLeaveHandle from './components/AdminLeaveHandle'; // Add this line
-// Placeholder components - create these later
 
+// Placeholder components - create these later
 // const NurseDashboard = () => <div>Nurse Dashboard</div>;
 // const AdminDashboard = () => <div>Admin Dashboard</div>;
-
 
 
 const App = () => {
@@ -36,14 +32,14 @@ const App = () => {
         <Route path="/admin-dashboard" element={<AdminDashboard />} /> {/* Add Admin Dashboard route */}
         <Route path="/" element={<Login />} />
 
-       
+        <Route path="/admin-leave-handle" element={<AdminLeaveHandle />} />
         <Route path="/payslip-download" element={<PayslipDownload />} />
         <Route path="/payroll-history" element={<PayrollHistory />} />
         <Route path="/payrolls" element={<Payroll />} />
         <Route path="/admin-payroll" element={<AdminPayroll />} /> {/* Add Admin Payroll route */}
         <Route path="/leave-request" element={<LeaveRequest />} />
         <Route path="/attendance" element={<Attendance />} /> {/* Add this line */}
-        <Route path="/admin-leave-handle" element={<AdminLeaveHandle />} /> {/* Add this line */}
+       
       </Routes>
     </Router>
   );

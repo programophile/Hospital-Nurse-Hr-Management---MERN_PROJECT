@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { user, login } = useAuth(); // Use the `login` function from AuthContext
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -13,24 +15,35 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', {
         email,
-        password
+        password,
       });
+      console.log('Response Data:', response.data.user.id);
 
       // Save token and user info
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('nurseId', response.data.user.id);
+      console.log('Nurse ID stored in local storage:', localStorage.getItem('nurseId'));
+
       localStorage.setItem('user', JSON.stringify(response.data.user)); // Use 'user' instead of 'nurse'
 
-      // Redirect based on role
-      if (response.data.user.role === 'admin') {
-        navigate('/admin-dashboard');
-      } else {
-        navigate('/nurse-dashboard');
-      }
+      // Update the user state in AuthContext
+      login(response.data.user); // Pass the user data to the `login` function
     } catch (err) {
       setError('Login failed. Please check your credentials.');
       console.error(err);
     }
   };
+
+  // Redirect based on role after the user state is updated
+  useEffect(() => {
+    if (user) {
+      if (user.role === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
+        navigate('/nurse-dashboard');
+      }
+    }
+  }, [user, navigate]);
 
   return (
     <div className="login-container">
@@ -52,7 +65,9 @@ const Login = () => {
           required
         />
         <button type="submit">Login</button>
-        <p>Don't have an account? <a href="/register">Register</a></p>
+        <p>
+          Don't have an account? <a href="/register">Register</a>
+        </p>
       </form>
     </div>
   );

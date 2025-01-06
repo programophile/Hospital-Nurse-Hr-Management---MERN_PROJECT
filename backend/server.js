@@ -13,7 +13,7 @@ import attendanceRoutes from './routes/attendance.js';
 import approvePayrollRoutes from './routes/approvePayroll.js';
 import dotenv from 'dotenv';
 dotenv.config();
-
+console.log('Server file executed');
 // Initialize app
 const app = express();
 
@@ -80,3 +80,7 @@ connect(process.env.MONGODB_URI)
     .catch(err => {
         console.error('MongoDB connection error:', err);
     });
+app.use((req, res, next) => {
+    console.log('Request URL:', req.url);
+    next();
+  });

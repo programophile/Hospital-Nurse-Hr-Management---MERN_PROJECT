@@ -32,7 +32,8 @@ const Payroll = () => {
         const storedUser = JSON.parse(localStorage.getItem('user'));
         if (storedUser) {
             setUser(storedUser);
-            setNurseId(storedUser._id); // Set the Nurse ID from the user info
+            setNurseId(storedUser.id); 
+            console.log("storeddd",storedUser);// Set the Nurse ID from the user info
         }
 
         // Set the default month and year to the current values
@@ -43,7 +44,9 @@ const Payroll = () => {
         // Fetch list of nurses for admin
         if (storedUser && storedUser.role === 'admin') {
             fetchNurses().then((response) => {
-                setNurses(response.data);
+                console.log("kisu ekta",response);
+                setNurses(response);
+
             }).catch((error) => {
                 console.error('Error fetching nurses:', error);
             });

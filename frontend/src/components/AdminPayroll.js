@@ -55,7 +55,7 @@ const Payroll = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ status: 'Approved' }),
+            body: JSON.stringify({ status: 'Payment Completed' }),
         })
         .then(response => {
             if (!response.ok) {
@@ -89,7 +89,7 @@ const Payroll = () => {
 
                             {/* Admin can approve payroll */}
                             {user && user.role === 'admin' && (
-                                <button onClick={() => handleApprovePayroll(payroll._id)} className="approve-btn">Approve</button>
+                                <button onClick={() => handleApprovePayroll(payroll._id)} className="approve-btn">Payment Completion</button>
                             )}
                         </li>
                     ))}

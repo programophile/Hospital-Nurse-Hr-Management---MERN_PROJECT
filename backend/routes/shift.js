@@ -30,6 +30,23 @@ router.get('/', async (req, res) => {
       res.status(500).json({ message: 'Error fetching shifts', error: error.message });
     }
   });
+
+  // Get Shifts by Nurse ID
+router.get('/nurse/:nurseId', async (req, res) => {
+    try {
+      const nurseId = req.params.nurseId;
+      const shifts = await Shift.find({ nurseId: nurseId }).populate('nurseId'); // Filter shifts by nurse ID
+      const formattedShifts = shifts.map(shift => ({
+        ...shift.toObject(),
+        date: shift.date.toISOString().split('T')[0], // Format date
+        startTime: shift.startTime, // Ensure start time is in HH:mm format
+        endTime: shift.endTime // Ensure end time is in HH:mm format
+      }));
+      res.json(formattedShifts);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching shifts', error: error.message });
+    }
+  });
 // Get Shifts for Logged-in Nurse
 router.get('/me', async (req, res) => {
     const nurseId = req.nurse.id; // Assuming you have middleware to set req.nurse

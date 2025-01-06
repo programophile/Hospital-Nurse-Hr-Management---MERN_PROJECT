@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+const API_URL = 'http://localhost:5000/api';
 export const fetchNurses = async () => {
     try {
       const response = await axios.get(`${API_URL}/nurses`);
@@ -10,7 +10,7 @@ export const fetchNurses = async () => {
     }
   };
 
-const API_URL = 'http://localhost:5000/api';
+
 // export const fetchNurses = async () => {
 //     try {
 //       const response = await axios.get(`${API_URL}/nurses`);
@@ -30,12 +30,12 @@ export const fetchDepartments = async () => {
       throw error;
     }
   };
-  export const fetchShifts = async () => {
+  export const fetchShifts = async (nurseId) => {
     try {
-      const response = await axios.get(`${API_URL}/shifts`);
+      const response = await axios.get(`${API_URL}/shifts?nurseId=${nurseId}`);
       const shifts = response.data;
       const nursePromises = shifts.map((shift) => {
-        console.log('nurseId:', shift.nurseId._id);
+        console.log('nurseIdCHECK:', shift.nurseId._id);
         return axios.get(`${API_URL}/nurses/${shift.nurseId._id}`);
       });
       console.log('nursePromises:', nursePromises);
@@ -59,8 +59,23 @@ export const fetchDepartments = async () => {
       throw error;
     }
   };
-
-
+  export const fetchAttendanceHistory = async (nurseId) => {
+    try {
+        console.log("Fetchattendance being called")
+        const response = await axios.get(`http://localhost:5000/api/attendance/${nurseId}`);
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            throw new Error(`Failed to load attendance history. Status code: ${response.status}`);
+        }
+    } catch (error) {
+        if (error.response) {
+            throw new Error(`Failed to load attendance history. Error: ${error.response.data.message}`);
+        } else {
+            throw new Error(`Failed to load attendance history. Error: ${error.message}`);
+        }
+    }
+};
   // frontend/src/api.js
 export const updateShift = async (shiftId, shiftData) => {
   try {
@@ -81,7 +96,16 @@ export const createNurse = (nurse) => axios.post(`${API_URL}/nurses`, nurse);
 
 
 export const createShift = (shift) => axios.post(`${API_URL}/shifts`, shift);
-export const fetchLeaves = () => axios.get(`${API_URL}/leaves`);
+export const fetchLeaves = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/leaves`);
+    console.log('Leaves response:', response); // Add this log
+    return response.data;
+  } catch (error) {
+    console.error('Error details:', error.response?.data); // Add this log
+    throw error;
+  }
+};
 //export const createLeave = (leave) => axios.post(`${API_URL}/leaves`, leave);
 export const fetchPayrolls = () => axios.get(`${API_URL}/payrolls`);
 export const createPayroll = (payroll) => axios.post(`${API_URL}/payrolls`, payroll);
@@ -90,9 +114,9 @@ export const deleteShift = (shiftId) => axios.delete(`${API_URL}/shifts/${shiftI
 
 export const fetchNurseByUserId = (userId) => {
     return axios.get(`${API_URL}/nurses/user/${userId}`);  };
-export const createLeave = (leave) => {
-    return axios.post(`${API_URL}/leaves`, leave); // Ensure this matches your backend route
-};
+    export const createLeave = (leave) => {
+      return axios.post(`${API_URL}/leaves`, leave); // Ensure this matches your backend route
+    };
 
 
 export const fetchUserPayrolls = (userId) => 
@@ -101,9 +125,11 @@ export const fetchUserPayrolls = (userId) =>
 // Payslip download function
 export const downloadPayslip = (userId, month, year) =>
     axios.get(`${API_URL}/payrolls/payslip/${userId}`, {
+        
         params: { month, year },
         responseType: 'blob'
     });
+    
 
 // New functions for updating and deleting payrolls
 export const updatePayroll = (payrollId, payroll) => 
@@ -124,22 +150,22 @@ export const markAttendance = (data) => {
 };
 
 // api.js
-export const fetchAttendanceHistory = async (nurseId) => {
-    try {
-        const response = await axios.get(`${API_URL}/attendance/${nurseId}`);
-        if (response.status === 200) {
-            return response.data;
-        } else {
-            throw new Error(`Failed to load attendance history. Status code: ${response.status}`);
-        }
-    } catch (error) {
-        if (error.response) {
-            throw new Error(`Failed to load attendance history. Error: ${error.response.data.message}`);
-        } else {
-            throw new Error(`Failed to load attendance history. Error: ${error.message}`);
-        }
-    }
-};
+// export const fetchAttendanceHistory = async (nurseId) => {
+//     try {
+//         const response = await axios.get(`${API_URL}/attendance/${nurseId}`);
+//         if (response.status === 200) {
+//             return response.data;
+//         } else {
+//             throw new Error(`Failed to load attendance history. Status code: ${response.status}`);
+//         }
+//     } catch (error) {
+//         if (error.response) {
+//             throw new Error(`Failed to load attendance history. Error: ${error.response.data.message}`);
+//         } else {
+//             throw new Error(`Failed to load attendance history. Error: ${error.message}`);
+//         }
+//     }
+// };
 
 export const fetchAllAttendance = async () => {
     try {
@@ -161,7 +187,7 @@ export const updateLeaveStatus = async (leaveId, newStatus) => {
     throw error;
   }
 };
-
+export const updateNurse = (id, nurse) => axios.put(`${API_URL}/nurses/${id}`, nurse);
 export const approvePayroll = (payrollId) => {
   return axios.put(`${API_URL}/payroll/approve/${payrollId}`, { status: 'Approved' });
 };
